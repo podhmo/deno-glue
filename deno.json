@@ -4,6 +4,7 @@
   },
   "imports": {
     "@podhmo/with-help": "jsr:@podhmo/with-help@^0.2",
-    "@deno/emit": "jsr:@deno/emit@0.46.0"
+    "@deno/emit": "jsr:@deno/emit@0.46.0",
+    "@std/path": "jsr:@std/path@1"
   }
 }

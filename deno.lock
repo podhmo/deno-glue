@@ -11,6 +11,7 @@
     "jsr:@std/fmt@0.223": "0.223.0",
     "jsr:@std/fs@0.223": "0.223.0",
     "jsr:@std/io@0.223": "0.223.0",
+    "jsr:@std/path@*": "1.0.8",
     "jsr:@std/path@0.223": "0.223.0"
   },
   "jsr": {
@@ -21,14 +22,14 @@
         "jsr:@std/fmt",
         "jsr:@std/fs",
         "jsr:@std/io",
-        "jsr:@std/path"
+        "jsr:@std/path@0.223"
       ]
     },
     "@deno/emit@0.46.0": {
       "integrity": "e276be2c77bac1b93caf775762e2a49a54cb00da2d48ca2b01ed8d7cba9d082c",
       "dependencies": [
         "jsr:@deno/cache-dir",
-        "jsr:@std/path"
+        "jsr:@std/path@0.223"
       ]
     },
     "@deno/graph@0.73.1": {
@@ -67,12 +68,16 @@
       "dependencies": [
         "jsr:@std/assert"
       ]
+    },
+    "@std/path@1.0.8": {
+      "integrity": "548fa456bb6a04d3c1a1e7477986b6cffbce95102d0bb447c67c4ee70e0364be"
     }
   },
   "workspace": {
     "dependencies": [
       "jsr:@deno/emit@0.46.0",
-      "jsr:@podhmo/with-help@0.2"
+      "jsr:@podhmo/with-help@0.2",
+      "jsr:@std/path@1"
     ]
   }
 }
