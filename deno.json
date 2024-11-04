@@ -1,6 +1,7 @@
 {
   "tasks": {
-    "dev": "deno run --watch main.ts"
+    "check": "deno check *.ts",
+    "ok": "deno lint && deno task check && deno test"
   },
   "imports": {
     "@podhmo/with-help": "jsr:@podhmo/with-help@^0.2",
