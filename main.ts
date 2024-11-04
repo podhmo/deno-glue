@@ -16,7 +16,7 @@ async function main(args: string[]) {
 
     if (options.dst !== undefined) {
       // write to file
-      const writename = pathjoin(options.dst, basename(filename).replace(/\.ts$/, ".js"));
+      const writename = pathjoin(options.dst, basename(filename).replace(/\.tsx?$/, ".js"));
       await Deno.mkdir(dirname(writename), { recursive: true });
 
       console.log(`write to ${writename}`);
