@@ -1,5 +1,9 @@
 default: clean
-	deno run -A main.ts testdata/src/hello.ts --dst testdata/dst
+	deno run -A main.ts --dst testdata/dst \
+ testdata/src/hello.ts \
+ testdata/src/hello-component.tsx \
+
+
 .PHONY: default
 
 clean:
