@@ -5,6 +5,8 @@ import { join as pathjoin, dirname, basename } from "jsr:@std/path"
 
 async function main(args: string[]) {
   const options = parseArgs(args, {
+    name: "bundle",
+    description: "bundle typescript file (deno/emit wrapper)",
     string: ["dst"],
     // string: ["config"], // TODO: loading tsconfig.json for something of jsxFactory option and so on.
   } as const);
