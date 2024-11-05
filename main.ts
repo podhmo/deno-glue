@@ -1,11 +1,12 @@
 import { bundle } from "@deno/emit";
-import { parseArgs } from "@podhmo/with-help";
+import { parseArgs, buildUsage } from "@podhmo/with-help";
 import { join as pathjoin, dirname, basename } from "jsr:@std/path"
 // deno run -A main.ts testdata/hello.ts
 
 async function main(args: string[]) {
   const options = parseArgs(args, {
     name: "bundle",
+    usageText: `${buildUsage({name: "bundle"})} <filename>...`,
     description: "bundle typescript file (deno/emit wrapper)",
     string: ["dst"],
     // string: ["config"], // TODO: loading tsconfig.json for something of jsxFactory option and so on.

@@ -4,7 +4,7 @@
     "jsr:@deno/cache-dir@0.13.2": "0.13.2",
     "jsr:@deno/emit@0.46.0": "0.46.0",
     "jsr:@deno/graph@~0.73.1": "0.73.1",
-    "jsr:@podhmo/with-help@0.2": "0.2.0",
+    "jsr:@podhmo/with-help@0.3": "0.3.0",
     "jsr:@std/assert@0.223": "0.223.0",
     "jsr:@std/bytes@0.223": "0.223.0",
     "jsr:@std/cli@1": "1.0.6",
@@ -36,8 +36,8 @@
     "@deno/graph@0.73.1": {
       "integrity": "cd69639d2709d479037d5ce191a422eabe8d71bb68b0098344f6b07411c84d41"
     },
-    "@podhmo/with-help@0.2.0": {
-      "integrity": "feb320c0264d17ac0456e9fb30b38863524544a9f83ddbfab24961534545591f",
+    "@podhmo/with-help@0.3.0": {
+      "integrity": "7fa59b1cf48a9195dc3c7818c159e4d2cc19489173c2f90fee0804b3cf4d6e0b",
       "dependencies": [
         "jsr:@std/cli"
       ]
@@ -82,7 +82,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@deno/emit@0.46.0",
-      "jsr:@podhmo/with-help@0.2",
+      "jsr:@podhmo/with-help@0.3",
       "jsr:@std/path@1"
     ]
   }
