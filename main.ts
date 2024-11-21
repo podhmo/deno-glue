@@ -39,7 +39,7 @@ async function main() {
     let plugins = pluginsCache.get(configPath);
     if (plugins === undefined) {
       plugins = [
-        PathReplacePlugin({
+        await PathReplacePlugin({
           configPath,
           debug: args.debug,
         }),

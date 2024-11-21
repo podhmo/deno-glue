@@ -4,7 +4,7 @@ import * as jsonc from "@std/jsonc";
 /**
  esbuild plugin for rewriting deno's original import path to esm.sh URL
 */
-export function PathReplacePlugin(
+export async function PathReplacePlugin(
   options: { configPath?: string; debug: boolean } = { debug: false },
 ) {
   // deno.json
@@ -24,10 +24,10 @@ export function PathReplacePlugin(
   if (options.configPath) {
     debug(`[DEBUG] load deno.json from ${options.configPath}`);
     if (options.configPath.endsWith(".jsonc")) {
-      const text = Deno.readTextFileSync(options.configPath);
+      const text = await Deno.readTextFile(options.configPath);
       config = JSON.parse(JSON.stringify(jsonc.parse(text)));
     } else {
-      const text = Deno.readTextFileSync(options.configPath);
+      const text = await Deno.readTextFile(options.configPath);
       config = JSON.parse(text);
     }
 
@@ -41,7 +41,7 @@ export function PathReplacePlugin(
     try {
       debug(`[DEBUG] load deno.lock from ${options.configPath}`);
       const lockConfig: LockConfig = JSON.parse(
-        Deno.readTextFileSync(
+        await Deno.readTextFile(
           options.configPath.replace("deno.json", "deno.lock"),
         ),
       );
