@@ -8,7 +8,7 @@ import { type BuildOptions } from "npm:esbuild";
 import { denoPlugins } from "@luca/esbuild-deno-loader";
 import { PathReplacePlugin } from "./esbuild-plugin.ts";
 
-// main
+
 async function main() {
   const args = parseArgs(Deno.args, {
     name: "mini-bundle",
