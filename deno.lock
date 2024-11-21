@@ -7,6 +7,8 @@
     "jsr:@std/cli@1": "1.0.6",
     "jsr:@std/encoding@^1.0.5": "1.0.5",
     "jsr:@std/fs@^1.0.5": "1.0.5",
+    "jsr:@std/json@1": "1.0.1",
+    "jsr:@std/jsonc@^1.0.1": "1.0.1",
     "jsr:@std/path@^1.0.6": "1.0.8",
     "jsr:@std/path@^1.0.7": "1.0.8",
     "jsr:@std/path@^1.0.8": "1.0.8",
@@ -40,6 +42,15 @@
       "integrity": "41806ad6823d0b5f275f9849a2640d87e4ef67c51ee1b8fb02426f55e02fd44e",
       "dependencies": [
         "jsr:@std/path@^1.0.7"
+      ]
+    },
+    "@std/json@1.0.1": {
+      "integrity": "1f0f70737e8827f9acca086282e903677bc1bb0c8ffcd1f21bca60039563049f"
+    },
+    "@std/jsonc@1.0.1": {
+      "integrity": "6b36956e2a7cbb08ca5ad7fbec72e661e6217c202f348496ea88747636710dda",
+      "dependencies": [
+        "jsr:@std/json"
       ]
     },
     "@std/path@1.0.8": {
@@ -154,6 +165,7 @@
       "jsr:@luca/esbuild-deno-loader@0.11",
       "jsr:@podhmo/with-help@0.5",
       "jsr:@std/fs@^1.0.5",
+      "jsr:@std/jsonc@^1.0.1",
       "jsr:@std/path@^1.0.8"
     ]
   }

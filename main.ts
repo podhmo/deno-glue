@@ -1,4 +1,4 @@
-import { basename, dirname, join as pathjoin } from "@std/path"
+import { basename, dirname, join as pathjoin } from "@std/path";
 import { exists } from "@std/fs";
 
 import { buildUsage, parseArgs } from "@podhmo/with-help";
@@ -18,14 +18,16 @@ async function main() {
     boolean: ["debug"],
   });
 
-
   // TODO: concurrency
   for (const inputFile of args._) {
     let configPath = args["deno-config"];
     if (configPath === undefined) {
-      const guessedPath = await findClosestConfigFile(dirname(inputFile), ["deno.json"]);
-      if(guessedPath !== null) {
-        if(args.debug) {
+      const guessedPath = await findClosestConfigFile(dirname(inputFile), [
+        "deno.json",
+        "deno.jsonc",
+      ]);
+      if (guessedPath !== null) {
+        if (args.debug) {
           console.error(`[DEBUG] guessed deno.json is ${guessedPath}`);
         }
         configPath = guessedPath;
@@ -33,15 +35,24 @@ async function main() {
     }
 
     const buildOptions: BuildOptions = {
-      plugins: [PathReplacePlugin({ configPath: args["deno-config"], debug: args.debug }), ...denoPlugins({
-        loader: "native",
-      })],
+      plugins: [
+        PathReplacePlugin({
+          configPath: args["deno-config"],
+          debug: args.debug,
+        }),
+        ...denoPlugins({
+          loader: "native",
+        }),
+      ],
       entryPoints: [inputFile],
       bundle: true,
       format: "esm",
-    }
+    };
     if (args.outdir !== undefined) {
-      const outFile = pathjoin(args.outdir, basename(inputFile).replace(/\.tsx?$/, ".mjs"));
+      const outFile = pathjoin(
+        args.outdir,
+        basename(inputFile).replace(/\.tsx?$/, ".mjs"),
+      );
       console.error(`[INFO] write to ${outFile}`);
       buildOptions.outfile = outFile;
     }
@@ -51,7 +62,10 @@ async function main() {
   await esbuild.stop();
 }
 
-async function findClosestConfigFile(startPath: string, targetFiles: string[]): Promise<string | null> {
+async function findClosestConfigFile(
+  startPath: string,
+  targetFiles: string[],
+): Promise<string | null> {
   let currentPath = await Deno.realPath(startPath);
 
   while (currentPath) {
