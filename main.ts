@@ -22,8 +22,8 @@ async function main() {
 
   // TODO: concurrency
   for (const inputFile of args._) {
-    let configPath = args["deno-config"];
-    if (configPath === undefined) {
+    let denoConfigPath = args["deno-config"];
+    if (denoConfigPath === undefined) {
       const guessedPath = await findClosestConfigFile(dirname(inputFile), [
         "deno.json",
         "deno.jsonc",
@@ -32,22 +32,22 @@ async function main() {
         if (args.debug) {
           console.error(`[DEBUG] guessed deno.json is ${guessedPath}`);
         }
-        configPath = guessedPath;
+        denoConfigPath = guessedPath;
       }
     }
 
-    let plugins = pluginsCache.get(configPath);
+    let plugins = pluginsCache.get(denoConfigPath);
     if (plugins === undefined) {
       plugins = [
         await PathReplacePlugin({
-          configPath,
+          denoConfigPath,
           debug: args.debug,
         }),
         ...denoPlugins({
           loader: "native",
         }),
       ];
-      pluginsCache.set(configPath, plugins);
+      pluginsCache.set(denoConfigPath, plugins);
     }
 
     const buildOptions: BuildOptions = {

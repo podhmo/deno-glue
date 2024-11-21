@@ -5,7 +5,7 @@ import * as jsonc from "@std/jsonc";
  esbuild plugin for rewriting deno's original import path to esm.sh URL
 */
 export async function PathReplacePlugin(
-  options: { configPath?: string; debug: boolean } = { debug: false },
+  options: { denoConfigPath?: string; debug: boolean } = { debug: false },
 ) {
   // deno.json
   interface Config {
@@ -21,13 +21,13 @@ export async function PathReplacePlugin(
   const debug = options.debug ? console.error : () => {};
 
   let config: Config = { imports: {}, specifiers: {} }; // deno.json
-  if (options.configPath) {
-    debug(`[DEBUG] load deno.json from ${options.configPath}`);
-    if (options.configPath.endsWith(".jsonc")) {
-      const text = await Deno.readTextFile(options.configPath);
+  if (options.denoConfigPath) {
+    debug(`[DEBUG] load deno.json from ${options.denoConfigPath}`);
+    if (options.denoConfigPath.endsWith(".jsonc")) {
+      const text = await Deno.readTextFile(options.denoConfigPath);
       config = JSON.parse(JSON.stringify(jsonc.parse(text)));
     } else {
-      const text = await Deno.readTextFile(options.configPath);
+      const text = await Deno.readTextFile(options.denoConfigPath);
       config = JSON.parse(text);
     }
 
@@ -39,10 +39,10 @@ export async function PathReplacePlugin(
     }
 
     try {
-      debug(`[DEBUG] load deno.lock from ${options.configPath}`);
+      debug(`[DEBUG] load deno.lock from ${options.denoConfigPath}`);
       const lockConfig: LockConfig = JSON.parse(
         await Deno.readTextFile(
-          options.configPath.replace("deno.json", "deno.lock"),
+          options.denoConfigPath.replace("deno.json", "deno.lock"),
         ),
       );
       config.specifiers = lockConfig.specifiers;
