@@ -54,6 +54,8 @@ async function main() {
       plugins: plugins,
       entryPoints: [inputFile],
       bundle: true,
+      color: true,
+      logLevel: args.debug ? "debug" : "info",
       format: "esm",
     };
 
