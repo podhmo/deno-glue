@@ -1,4 +1,4 @@
-import { basename, dirname, join as pathjoin } from "@std/path";
+import { dirname, join as pathjoin } from "@std/path";
 import { exists } from "@std/fs";
 
 import { buildUsage, parseArgs } from "@podhmo/with-help";
@@ -14,8 +14,14 @@ async function main() {
     name: "mini-bundle",
     usageText: `${buildUsage({ name: "mini-bundle" })} <filename>...`,
     description: "外部の依存は可能な限りesm.shの方に任せる bundler",
+
     string: ["outdir", "deno-config"],
     boolean: ["debug"],
+
+    flagDescription: {
+      outdir: "output directory",
+      "deno-config": "deno.json or deno.jsonc",
+    },
   });
 
   const pluginsCache = new Map<string | undefined, esbuild.Plugin[]>();
@@ -57,15 +63,11 @@ async function main() {
       color: true,
       logLevel: args.debug ? "debug" : "info",
       format: "esm",
+      outdir: args.outdir,
+      outExtension: {
+        ".js": ".mjs",
+      },
     };
-
-    if (args.outdir !== undefined) {
-      const outFile = pathjoin(
-        args.outdir,
-        basename(inputFile).replace(/\.tsx?$/, ".mjs"),
-      );
-      buildOptions.outfile = outFile;
-    }
 
     await esbuild.build(buildOptions);
   }
