@@ -1,9 +1,9 @@
-import { basename, join as pathjoin } from "jsr:@std/path@1.0.8"
-import { buildUsage, parseArgs } from "jsr:@podhmo/with-help@0.5.0";
+import { basename, join as pathjoin } from "@std/path"
+import { buildUsage, parseArgs } from "@podhmo/with-help";
 
 import * as esbuild from "npm:esbuild";
 import { type BuildOptions } from "npm:esbuild";
-import { denoPlugins } from "jsr:@luca/esbuild-deno-loader";
+import { denoPlugins } from "@luca/esbuild-deno-loader";
 import { PathReplacePlugin } from "./esbuild-plugin.ts";
 
 // main

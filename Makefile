@@ -6,7 +6,7 @@ clean:
 .PHONY: clean
 
 ## output to stdout
-testdata/dst/hello.stdout.js: testdata/src/hello.ts main.ts
+00: testdata/src/hello.ts main.ts
 	mkdir -p testdata/dst
 	deno run -A main.ts $(filter-out main.ts,$^) > testdata/dst/hello.stdout.js
 .PHONY: 00
