@@ -18,6 +18,8 @@ async function main() {
     boolean: ["debug"],
   });
 
+  const pluginsCache = new Map<string | undefined, esbuild.Plugin[]>();
+
   // TODO: concurrency
   for (const inputFile of args._) {
     let configPath = args["deno-config"];
@@ -34,26 +36,32 @@ async function main() {
       }
     }
 
-    const buildOptions: BuildOptions = {
-      plugins: [
+    let plugins = pluginsCache.get(configPath);
+    if (plugins === undefined) {
+      plugins = [
         PathReplacePlugin({
-          configPath: args["deno-config"],
+          configPath,
           debug: args.debug,
         }),
         ...denoPlugins({
           loader: "native",
         }),
-      ],
+      ];
+      pluginsCache.set(configPath, plugins);
+    }
+
+    const buildOptions: BuildOptions = {
+      plugins: plugins,
       entryPoints: [inputFile],
       bundle: true,
       format: "esm",
     };
+
     if (args.outdir !== undefined) {
       const outFile = pathjoin(
         args.outdir,
         basename(inputFile).replace(/\.tsx?$/, ".mjs"),
       );
-      console.error(`[INFO] write to ${outFile}`);
       buildOptions.outfile = outFile;
     }
 
