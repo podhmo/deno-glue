@@ -76,7 +76,7 @@ export async function PathReplacePlugin(
           { filter: regexp },
           (args: esbuild.OnResolveArgs): esbuild.OnResolveResult | null => {
             debug(`[DEBUG] resolve ${args.path} -> ${path}`);
-            let replaced = args.path.replace(regexp, path + "/");
+            let replaced = args.path.replace(regexp, path);
 
             // jsr: -> https://esm.sh/jsr/
             if (replaced.startsWith("jsr:")) {
