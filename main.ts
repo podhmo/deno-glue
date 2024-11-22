@@ -5,7 +5,6 @@ import { buildUsage, parseArgs } from "@podhmo/with-help";
 
 import * as esbuild from "npm:esbuild";
 import { type BuildOptions } from "npm:esbuild";
-import { denoPlugins } from "@luca/esbuild-deno-loader";
 import { PathReplacePlugin } from "./esbuild-plugin.ts";
 
 
@@ -48,9 +47,6 @@ async function main() {
         await PathReplacePlugin({
           denoConfigPath,
           debug: args.debug,
-        }),
-        ...denoPlugins({
-          loader: "native",
         }),
       ];
       pluginsCache.set(denoConfigPath, plugins);
