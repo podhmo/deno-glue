@@ -71,7 +71,7 @@ export async function PathReplacePlugin(
       // local deno.json's imports
       for (const [alias, path] of Object.entries(config.imports ?? {})) {
         debug(`[DEBUG] setup resolve ${alias} -> ${path}`);
-        const regexp = new RegExp(`^${alias}/`);
+        const regexp = new RegExp(`^${alias}(/|$)`);
         build.onResolve(
           { filter: regexp },
           (args: esbuild.OnResolveArgs): esbuild.OnResolveResult | null => {
