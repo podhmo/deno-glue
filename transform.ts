@@ -1,5 +1,5 @@
 import * as esbuild from "esbuild";
-import { ESM_SH_BASE_URL, PathReplacePlugin } from "./_esbuild.ts";
+import { BASE_URL as ESM_SH_BASE_URL, PathReplacePlugin } from "./esm-sh.ts";
 
 export async function transform(
   options: {

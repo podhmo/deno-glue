@@ -1,7 +1,7 @@
 import * as esbuild from "esbuild";
 import * as jsonc from "@std/jsonc";
 
-export const ESM_SH_BASE_URL = "https://esm.sh";
+export const BASE_URL = "https://esm.sh";
 
 /**
  esbuild plugin for rewriting deno's original import path to esm.sh URL
@@ -9,10 +9,10 @@ export const ESM_SH_BASE_URL = "https://esm.sh";
 export async function PathReplacePlugin(
   options: { denoConfigPath?: string; debug: boolean; baseUrl: string } = {
     debug: false,
-    baseUrl: ESM_SH_BASE_URL,
+    baseUrl: BASE_URL,
   },
 ) {
-  let baseUrl = options.baseUrl ?? ESM_SH_BASE_URL;
+  let baseUrl = options.baseUrl ?? BASE_URL;
   if (baseUrl.endsWith("/")) {
     baseUrl = baseUrl.slice(0, -1);
   }

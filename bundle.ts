@@ -5,7 +5,7 @@ import { buildUsage, parseArgs } from "@podhmo/with-help";
 
 import * as esbuild from "esbuild";
 import { type BuildOptions } from "esbuild";
-import { ESM_SH_BASE_URL, PathReplacePlugin } from "./_esbuild.ts";
+import { BASE_URL as ESM_SH_BASE_URL, PathReplacePlugin } from "./esm-sh.ts";
 
 async function main() {
   const args = parseArgs(Deno.args, {
