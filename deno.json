@@ -1,11 +1,22 @@
 {
-  "tasks": {
-    "check": "deno check *.ts",
-    "ok": "deno lint && deno task check && deno test"
-  },
+  "name": "@podhmo/glue",
+  "version": "0.1.0",
+  "license": "MIT",
   "exports": {
     ".": "./mod.ts",
     "./bundle": "./bundle.ts"
+  },
+  "publish": {
+    "include": [
+      "README.md",
+      "LICENSE",
+      "deno.json",
+      "*.ts"
+    ]
+  },
+  "tasks": {
+    "check": "deno check *.ts",
+    "ok": "deno lint && deno task check && deno test"
   },
   "fmt": {
     "exclude": [
