@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "lib": ["deno.ns", "dom"]
+  },
+  "tasks": {
+    "serve": "deno run --allow-net --allow-read --allow-env --allow-run ./main.ts --port 8080"
+  },
+  "imports": {
+    "@std/jsonc": "jsr:@std/jsonc@^1.0.1",
+    "esbuild": "npm:esbuild@^0.24.2"
+  }
+}
