@@ -1,5 +1,5 @@
-import { transform } from "./transform.ts";
-export { transform as tsxToJs };
+import { transpile } from "./esm-sh.ts";
+export { transpile as tsxToJs };
 
 export const DEFAULT_CSS =
   `https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css`;
