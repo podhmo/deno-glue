@@ -21,7 +21,7 @@ function Counter() {
 }
 export default function App() {
   return (
-    <main>
+    <main className="container">
       <h1>couter example</h1>
       <Counter />
     </main>

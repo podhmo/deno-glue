@@ -19,11 +19,16 @@ app.get("/", async (ctx: Context) => {
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>hello world</title>
+        <title>counter example</title>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+        >
+        </link>
       </head>
 
       <body>
-        <main id="root">
+        <main id="root" class="container">
           <h1>...</h1>
         </main>
         <script
@@ -34,6 +39,7 @@ app.get("/", async (ctx: Context) => {
       </body>
     </html>
   );
+  // TODO: need !DOCTYPE
   return ctx.html(html);
 });
 export default app; // for deno serve
