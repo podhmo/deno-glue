@@ -1,12 +1,22 @@
 import * as esbuild from "esbuild";
 import * as jsonc from "@std/jsonc";
 
+export const ESM_SH_BASE_URL = "https://esm.sh";
+
 /**
  esbuild plugin for rewriting deno's original import path to esm.sh URL
 */
 export async function PathReplacePlugin(
-  options: { denoConfigPath?: string; debug: boolean } = { debug: false },
+  options: { denoConfigPath?: string; debug: boolean; baseUrl: string } = {
+    debug: false,
+    baseUrl: ESM_SH_BASE_URL,
+  },
 ) {
+  let baseUrl = options.baseUrl ?? ESM_SH_BASE_URL;
+  if (baseUrl.endsWith("/")) {
+    baseUrl = baseUrl.slice(0, -1);
+  }
+
   // deno.json
   interface Config {
     imports: Record<string, string>;
@@ -80,12 +90,12 @@ export async function PathReplacePlugin(
 
             // jsr: -> https://esm.sh/jsr/
             if (replaced.startsWith("jsr:")) {
-              replaced = replaced.replace("jsr:", "https://esm.sh/jsr/");
+              replaced = replaced.replace("jsr:", `${baseUrl}/jsr/`);
             }
 
             // npm: -> https://esm.sh/
             if (replaced.startsWith("npm:")) {
-              replaced = replaced.replace("npm:", "https://esm.sh/");
+              replaced = replaced.replace("npm:", `${baseUrl}/`);
             }
             return { path: replaced, external: true };
           },
@@ -93,12 +103,12 @@ export async function PathReplacePlugin(
       }
 
       // jsr: -> https://esm.sh/jsr/
-      debug("[DEBUG] setup resolve jsr: -> https://esm.sh/jsr/");
+      debug(`[DEBUG] setup resolve jsr: -> ${baseUrl}/jsr/`);
       build.onResolve(
         { filter: /^jsr:/ },
         (args: esbuild.OnResolveArgs): esbuild.OnResolveResult | null => {
           debug(`[DEBUG] resolve ${args.path}`);
-          let replaced = args.path.replace(/^jsr:/, "https://esm.sh/jsr/");
+          let replaced = args.path.replace(/^jsr:/, `${baseUrl}/jsr/`);
           const version = config.specifiers[args.path + "@*"];
           if (version) {
             replaced = `${replaced}@${version}`;
@@ -108,12 +118,12 @@ export async function PathReplacePlugin(
       );
 
       // npm: -> https://esm.sh/
-      debug("[DEBUG] setup resolve npm: -> https://esm.sh/");
+      debug(`[DEBUG] setup resolve npm: -> ${baseUrl}/`);
       build.onResolve(
         { filter: /^npm:/ },
         (args: esbuild.OnResolveArgs): esbuild.OnResolveResult | null => {
           debug(`[DEBUG] resolve ${args.path}`);
-          let replaced = args.path.replace(/^npm:/, "https://esm.sh/");
+          let replaced = args.path.replace(/^npm:/, `${baseUrl}/`);
           const version = config.specifiers[args.path + "@*"];
           if (version) {
             replaced = `${replaced}@${version}`;

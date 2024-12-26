@@ -1,15 +1,21 @@
 import * as esbuild from "esbuild";
-import { PathReplacePlugin } from "./_esbuild.ts";
+import { ESM_SH_BASE_URL, PathReplacePlugin } from "./_esbuild.ts";
 
 export async function transform(
   options: {
     filename: string;
     debug: boolean;
     denoConfigPath?: string;
+    baseUrl?: string;
   },
 ): Promise<string> {
+  let baseUrl = ESM_SH_BASE_URL;
+  if (options.baseUrl !== undefined) {
+    baseUrl = options.baseUrl;
+  }
+
   const plugins: esbuild.Plugin[] = [
-    await PathReplacePlugin(options),
+    await PathReplacePlugin({ ...options, baseUrl }),
   ];
   const b: esbuild.BuildResult = await esbuild.build({
     // inject, alias

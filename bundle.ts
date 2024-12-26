@@ -5,7 +5,7 @@ import { buildUsage, parseArgs } from "@podhmo/with-help";
 
 import * as esbuild from "esbuild";
 import { type BuildOptions } from "esbuild";
-import { PathReplacePlugin } from "./_esbuild.ts";
+import { ESM_SH_BASE_URL, PathReplacePlugin } from "./_esbuild.ts";
 
 async function main() {
   const args = parseArgs(Deno.args, {
@@ -13,8 +13,12 @@ async function main() {
     usageText: `${buildUsage({ name: "mini-bundle" })} <filename>...`,
     description: "外部の依存は可能な限りesm.shの方に任せる bundler",
 
-    string: ["outdir", "deno-config"],
+    string: ["outdir", "deno-config", "esm-sh-base-url"],
     boolean: ["debug"],
+    required: ["esm-sh-base-url"],
+    default: {
+      "esm-sh-base-url": ESM_SH_BASE_URL,
+    },
 
     flagDescription: {
       outdir: "output directory",
@@ -46,6 +50,7 @@ async function main() {
         await PathReplacePlugin({
           denoConfigPath,
           debug: args.debug,
+          baseUrl: args["esm-sh-base-url"],
         }),
       ];
       pluginsCache.set(denoConfigPath, plugins);
