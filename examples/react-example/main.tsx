@@ -7,12 +7,7 @@ import { transform } from "../../transform.ts";
 // $ deno serve --port 8080 --allow-net --allow-read main.tsx
 const app = new Hono();
 app.get("/", async (ctx: Context) => {
-  const clientSideCode = await transform({
-    debug: true,
-    filename: "./client.tsx",
-    denoConfigPath: "./deno.json",
-  });
-
+  const clientSideCode = await generateClientSideCode();
   // inject client side code  https://hono.dev/docs/guides/jsx#dangerouslysetinnerhtml
   const html = (
     <HTML>
@@ -30,6 +25,14 @@ app.get("/", async (ctx: Context) => {
   );
   return ctx.html(html);
 });
+
+async function generateClientSideCode(): Promise<string> {
+  return await transform({
+    debug: true,
+    filename: "./client.tsx",
+    denoConfigPath: "./deno.json",
+  });
+}
 
 const HTML: FC = ({ children }) => {
   return (
@@ -56,3 +59,9 @@ const HTML: FC = ({ children }) => {
 };
 
 export default app; // for deno serve
+
+if (import.meta.main) {
+  if (Deno.env.has("DEBUG")) {
+    console.error(await generateClientSideCode());
+  }
+}
