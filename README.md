@@ -1,13 +1,3 @@
-# deno-bundle
+# deno-glue
 
-@deno/emit wrapper CLI
-
-```console
-Usage: bundle [options]
-
-Description: bundle typescript file (deno/emit wrapper)
-
-Options:
-  --help    show help
-  --dst     <string>
-```
+手軽にesm.shにオフロードしたbundleをする個人用の便利ツール

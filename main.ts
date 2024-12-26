@@ -7,7 +7,6 @@ import * as esbuild from "npm:esbuild";
 import { type BuildOptions } from "npm:esbuild";
 import { PathReplacePlugin } from "./esbuild-plugin.ts";
 
-
 async function main() {
   const args = parseArgs(Deno.args, {
     name: "mini-bundle",
