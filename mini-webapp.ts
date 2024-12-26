@@ -1,11 +1,18 @@
 import { transpile } from "./esm-sh.ts";
 export { transpile as tsxToJs };
 
-export const DEFAULT_CSS =
+// https://www.npmjs.com/package/@picocss/pico
+export const DEFAULT_CSS: string =
   `https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css`;
 
 export function HTML(
-  props: { id: string; code: string; title?: string; css?: string },
+  props: {
+    id: string;
+    code: string;
+    title?: string;
+    css?: string;
+    lang?: string; // e.g. "en" | "ja"
+  },
 ): string {
   const id = props.id;
   const title = props.title ?? "--";
@@ -14,11 +21,14 @@ export function HTML(
 
   const html = [
     "<!DOCTYPE html>",
-    "<html>",
+    props.lang
+      ? `<html lang="${props.lang}" data-theme="dark">`
+      : `<html data-theme="dark">`,
     "<head>",
     `<meta charset="utf-8" />`,
-    `<meta name="viewport" content="width=device-width, initial-scale=1" />`,
     `<title>${title}</title>`,
+    `<meta name="viewport" content="width=device-width, initial-scale=1" />`,
+    `<meta name="color-scheme" content="light dark" />`,
     css ? `<link rel="stylesheet" href="${css}" />` : null,
     "</head>",
     "<body>",

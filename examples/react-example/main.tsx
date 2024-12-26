@@ -38,10 +38,11 @@ const HTML: FC = ({ children }) => {
   return (
     <>
       {raw`<!DOCTYPE html>`}
-      <html>
+      <html lang="en" data-theme="dark">
         <head>
           <meta charset="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta name="color-schema" content="light dark"></meta>
           <title>counter example</title>
           <link
             rel="stylesheet"
