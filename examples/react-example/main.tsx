@@ -1,28 +1,8 @@
 /** @jsxImportSource jsr:@hono/hono@4.6.14/jsx */
 import { Context, Hono } from "jsr:@hono/hono@4.6.14";
 import type { FC } from "jsr:@hono/hono@4.6.14/jsx";
+import { raw } from "jsr:@hono/hono@4.6.14/utils/html";
 import { transform } from "../../transform.ts";
-
-const HTML: FC = ({ children }) => {
-  return (
-    <html>
-      <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>counter example</title>
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
-        >
-        </link>
-      </head>
-
-      <body>
-        {children}
-      </body>
-    </html>
-  );
-};
 
 // $ deno serve --port 8080 --allow-net --allow-read main.tsx
 const app = new Hono();
@@ -48,7 +28,31 @@ app.get("/", async (ctx: Context) => {
       </>
     </HTML>
   );
-  // TODO: need !DOCTYPE
   return ctx.html(html);
 });
+
+const HTML: FC = ({ children }) => {
+  return (
+    <>
+      {raw`<!DOCTYPE html>`}
+      <html>
+        <head>
+          <meta charset="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <title>counter example</title>
+          <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+          >
+          </link>
+        </head>
+
+        <body>
+          {children}
+        </body>
+      </html>
+    </>
+  );
+};
+
 export default app; // for deno serve
