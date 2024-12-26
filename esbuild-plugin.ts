@@ -1,4 +1,4 @@
-import * as esbuild from "npm:esbuild";
+import * as esbuild from "esbuild";
 import * as jsonc from "@std/jsonc";
 
 /**
