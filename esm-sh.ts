@@ -146,6 +146,7 @@ export async function transpile(
     debug: boolean;
     denoConfigPath?: string;
     baseUrl?: string;
+    plugins?: esbuild.Plugin[];
   },
 ): Promise<string> {
   let baseUrl = BASE_URL;
@@ -153,9 +154,13 @@ export async function transpile(
     baseUrl = options.baseUrl;
   }
 
-  const plugins: esbuild.Plugin[] = [
-    await PathReplacePlugin({ ...options, baseUrl }),
-  ];
+  let plugins = options.plugins;
+  if (options.plugins === undefined) {
+    plugins = [
+      await PathReplacePlugin({ ...options, baseUrl }),
+    ];
+  }
+
   const b: esbuild.BuildResult = await esbuild.build({
     // inject, alias
     entryPoints: [options.filename],
