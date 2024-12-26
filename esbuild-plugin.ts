@@ -95,7 +95,7 @@ export async function PathReplacePlugin(
       // jsr: -> https://esm.sh/jsr/
       debug("[DEBUG] setup resolve jsr: -> https://esm.sh/jsr/");
       build.onResolve(
-        { filter: /^jsr:.+$/ },
+        { filter: /^jsr:/ },
         (args: esbuild.OnResolveArgs): esbuild.OnResolveResult | null => {
           debug(`[DEBUG] resolve ${args.path}`);
           let replaced = args.path.replace(/^jsr:/, "https://esm.sh/jsr/");
@@ -110,7 +110,7 @@ export async function PathReplacePlugin(
       // npm: -> https://esm.sh/
       debug("[DEBUG] setup resolve npm: -> https://esm.sh/");
       build.onResolve(
-        { filter: /^npm:.+$/ },
+        { filter: /^npm:/ },
         (args: esbuild.OnResolveArgs): esbuild.OnResolveResult | null => {
           debug(`[DEBUG] resolve ${args.path}`);
           let replaced = args.path.replace(/^npm:/, "https://esm.sh/");
