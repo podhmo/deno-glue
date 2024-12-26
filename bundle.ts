@@ -5,7 +5,7 @@ import { buildUsage, parseArgs } from "@podhmo/with-help";
 
 import * as esbuild from "esbuild";
 import { type BuildOptions } from "esbuild";
-import { PathReplacePlugin } from "./esbuild-plugin.ts";
+import { PathReplacePlugin } from "./_esbuild.ts";
 
 async function main() {
   const args = parseArgs(Deno.args, {

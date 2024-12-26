@@ -1,5 +1,5 @@
 import * as esbuild from "esbuild";
-import { PathReplacePlugin } from "./esbuild-plugin.ts";
+import { PathReplacePlugin } from "./_esbuild.ts";
 
 export async function transform(
   options: {
