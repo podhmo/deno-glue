@@ -4,7 +4,7 @@ import { exists } from "@std/fs";
 import { buildUsage, parseArgs } from "@podhmo/with-help";
 
 import * as esbuild from "esbuild";
-import { type BuildOptions } from "npm:esbuild";
+import { type BuildOptions } from "esbuild";
 import { PathReplacePlugin } from "./esbuild-plugin.ts";
 
 async function main() {

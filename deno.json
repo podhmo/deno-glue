@@ -3,6 +3,15 @@
     "check": "deno check *.ts",
     "ok": "deno lint && deno task check && deno test"
   },
+  "exports": {
+    ".": "./mod.ts",
+    "./bundle": "./bundle.ts"
+  },
+  "fmt": {
+    "exclude": [
+      "testdata/"
+    ]
+  },
   "imports": {
     "@podhmo/with-help": "jsr:@podhmo/with-help@^0.5.0",
     "@std/fs": "jsr:@std/fs@^1.0.5",
