@@ -44,6 +44,7 @@ async function protocolHttp(url: URL, dest: string): Promise<Metadata> {
   return {
     url: url.href,
     headers,
+    status: download.status,
   };
 }
 

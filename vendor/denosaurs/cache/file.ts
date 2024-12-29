@@ -47,6 +47,7 @@ export type File = Readonly<IFile>;
 export interface Metadata {
   headers?: { [key: string]: string };
   url: string;
+  status?: number;
 }
 
 export class FileWrapper {
