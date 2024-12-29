@@ -75,10 +75,7 @@ export function serve(
   app: Module,
   options: ServeOptions,
 ): Deno.HttpServer<Deno.NetAddr> {
-  // activate local cache
-
   const hostname = options.hostname ?? "127.0.0.1";
-  // TODO: check if m is a Module
   return Deno.serve({
     port: options.port,
     hostname,
@@ -86,6 +83,11 @@ export function serve(
     signal: options.signal,
     onListen: options.onListen,
   });
+}
+
+export async function clearCache(): Promise<boolean> {
+  console.error("clear cache: %s/%s", cache.directory(), ns);
+  return await cache.purge(ns);
 }
 
 export async function main() {
@@ -133,11 +135,12 @@ export async function main() {
   }
 
   if (options["clear-cache"]) {
-    console.error("clear cache: %s/%s", cache.directory(), ns);
-    await cache.purge(ns);
+    await clearCache();
   }
 
   const hostname = "127.0.0.1";
+
+  // activate local cache
   if (options.cache) {
     setupBaseUrlForTranspile("/"); // request via local endpoint
     setupCachedProxyEndpoint(m.default, {
