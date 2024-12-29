@@ -138,7 +138,7 @@ async function path(url: URL, ns?: string): Promise<string> {
     url.hostname,
     await hash(url),
   ]);
-  return resolve(`${join(...path)}${extname(url.pathname)}`);
+  return resolve(`${join(...path)}${extname(url.pathname)}`).replace("\0", "");
 }
 
 function metapath(url: URL, ns?: string) {
