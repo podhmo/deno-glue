@@ -4,11 +4,7 @@ import { HTML, tsxToJs } from "../../mini-webapp.ts";
 
 const app = new Hono();
 app.get("/", async (ctx: Context) => {
-  const code = await tsxToJs({
-    filename: "./client.tsx",
-    debug: true,
-    baseUrl: "/",
-  });
+  const code = await tsxToJs("./client.tsx");
   const html = HTML({ code, id: "app", title: "Counter" });
   return ctx.html(html);
 });

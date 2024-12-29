@@ -2,6 +2,8 @@ import { moreStrict, parseArgs, printHelp } from "@podhmo/with-help";
 import { resolve } from "@std/path";
 import * as cache from "./vendor/denosaurs/cache/mod.ts";
 import type { Context, Hono } from "@hono/hono";
+import { BASE_URL as ESM_SH_BASE_URL } from "./esm-sh.ts";
+import { useCache as setupBaseUrlForTranspile } from "./mini-webapp.ts";
 
 // interface Module {
 //   fetch: Deno.ServeHandler;
@@ -17,61 +19,63 @@ type ServeOptions = {
   signal?: AbortSignal;
 } & Deno.ServeOptions<Deno.NetAddr>;
 
+// esm-shが自分自身のパスを返すのでとりあえずすべてをproxyする
+//
+// e.g.
+// /* esm.sh - react@18.3.1 */
+// export * from "/stable/react@18.3.1/es2022/react.mjs";
+// export { default } from "/stable/react@18.3.1/es2022/react.mjs";
+export function setupCachedProxyEndpoint(app: Module, options: {
+  hostname: string;
+  port: number;
+}) {
+  app.get("/*", async (ctx: Context): Promise<Response> => {
+    if (!ctx.req.url.startsWith("http")) {
+      return new Response("invalid url", { status: 404 });
+    }
+    if (ctx.req.path === "/favicon.ico") {
+      return new Response(null, { status: 404 });
+    }
+
+    const req = ctx.req;
+    let url = new URL(req.path, ESM_SH_BASE_URL).toString();
+    const query = req.query();
+    if (Object.keys(query).length > 0) {
+      url += `?${new URLSearchParams(query).toString()}`; // todo: sorted query string is needed (for cache)
+    }
+
+    // TODO: confirm cache and download
+    const data = await cache.cache(url, undefined, ns); // todo: passing policy
+    const status = data.meta.status ?? 200;
+    console.error("%cproxy request[%d]: %s", "color:gray", status, url);
+
+    if (status === 301 || status === 302 || status === 303) {
+      const headers = data.meta.headers ?? {};
+      let location = headers["Location"] || headers["location"];
+      if (location) {
+        location = location.replace(ESM_SH_BASE_URL, "");
+        console.error("%credirect: %s", "color:gray", location);
+        return ctx.redirect(location, status);
+      }
+    }
+
+    const fileData = await Deno.readFile(data.path);
+    return new Response(fileData, {
+      headers: {
+        ...data.meta.headers,
+        "Access-Control-Allow-Origin":
+          `http://${options.hostname}:${options.port}`,
+      },
+      status: data.meta.status ?? 200,
+    });
+  });
+}
+
 export function serve(
   app: Module,
   options: ServeOptions,
 ): Deno.HttpServer<Deno.NetAddr> {
   // activate local cache
-
-  {
-    // esm-shが自分自身のパスを返すのでとりあえずすべてをproxyする
-    //
-    // e.g.
-    // /* esm.sh - react@18.3.1 */
-    // export * from "/stable/react@18.3.1/es2022/react.mjs";
-    // export { default } from "/stable/react@18.3.1/es2022/react.mjs";
-
-    app.get("/*", async (ctx: Context): Promise<Response> => {
-      if (!ctx.req.url.startsWith("http")) {
-        return new Response("invalid url", { status: 404 });
-      }
-      if (ctx.req.path === "/favicon.ico") {
-        return new Response(null, { status: 404 });
-      }
-
-      const req = ctx.req;
-      let url = new URL(req.path, "https://esm.sh").toString();
-      const query = req.query();
-      if (Object.keys(query).length > 0) {
-        url += `?${new URLSearchParams(query).toString()}`; // todo: sorted query string is needed (for cache)
-      }
-
-      // TODO: confirm cache and download
-      const data = await cache.cache(url, undefined, ns); // todo: passing policy
-      const status = data.meta.status ?? 200;
-      console.error("%cproxy request[%d]: %s", "color:gray", status, url);
-
-      if (status === 301 || status === 302 || status === 303) {
-        const headers = data.meta.headers ?? {};
-        let location = headers["Location"] || headers["location"];
-        if (location) {
-          location = location.replace("https://esm.sh", "");
-          console.error("%credirect: %s", "color:gray", location);
-          return ctx.redirect(location, status);
-        }
-      }
-
-      const fileData = await Deno.readFile(data.path);
-      return new Response(fileData, {
-        headers: {
-          ...data.meta.headers,
-          "Access-Control-Allow-Origin":
-            `http://${options.hostname}:${options.port}`,
-        },
-        status: data.meta.status ?? 200,
-      });
-    });
-  }
 
   const hostname = options.hostname ?? "127.0.0.1";
   // TODO: check if m is a Module
@@ -92,7 +96,8 @@ export async function main() {
 
     string: ["port"],
     required: ["port"],
-    boolean: ["clear-cache"],
+    boolean: ["clear-cache", "cache"],
+    negatable: ["cache"],
     default: {
       port: "8080",
     },
@@ -119,11 +124,20 @@ export async function main() {
 
   if (options["clear-cache"]) {
     console.error("clear cache: %s/%s", cache.directory(), ns);
-    await cache.purge("podhmo-glue");
+    await cache.purge(ns);
+  }
+
+  const hostname = "127.0.0.1";
+  if (options.cache) {
+    setupBaseUrlForTranspile("/"); // request via local endpoint
+    setupCachedProxyEndpoint(m.default, {
+      hostname,
+      port: options.port,
+    });
   }
 
   serve(m.default, {
-    hostname: "127.0.0.1",
+    hostname,
     port: options.port,
     handler: m.fetch,
   });

@@ -1,9 +1,27 @@
 import { transpile } from "./esm-sh.ts";
-export { transpile as tsxToJs };
-
+import { BASE_URL as ESM_SH_BASE_URL } from "./esm-sh.ts";
 // https://www.npmjs.com/package/@picocss/pico
 export const DEFAULT_CSS: string =
   `https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css`;
+
+const options = {
+  baseUrl: ESM_SH_BASE_URL,
+  useCache: false,
+  debug: true,
+};
+
+export function useCache(proxyUrl: string) {
+  options.useCache = true;
+  options.baseUrl = proxyUrl; // request via local endpoint
+}
+
+export function tsxToJs(filename: string): Promise<string> {
+  return transpile({
+    filename,
+    debug: options.debug,
+    baseUrl: options.baseUrl,
+  });
+}
 
 export function HTML(
   props: {
