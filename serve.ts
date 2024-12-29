@@ -46,13 +46,11 @@ export function serve(
         url += `?${new URLSearchParams(query).toString()}`; // todo: sorted query string is needed (for cache)
       }
 
-      console.error("%cproxy request : %s", "color:gray", url);
-
       // TODO: confirm cache and download
       const data = await cache.cache(url, undefined, ns); // todo: passing policy
-      const fileData = await Deno.readFile(data.path);
-
       const status = data.meta.status ?? 200;
+      console.error("%cproxy request[%d]: %s", "color:gray", status, url);
+
       if (status === 301 || status === 302 || status === 303) {
         const headers = data.meta.headers ?? {};
         const location = headers["Location"] || headers["location"];
@@ -61,6 +59,7 @@ export function serve(
         }
       }
 
+      const fileData = await Deno.readFile(data.path);
       return new Response(fileData, {
         headers: {
           ...data.meta.headers,
