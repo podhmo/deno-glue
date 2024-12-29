@@ -32,6 +32,10 @@ export function serve(
     // export { default } from "/stable/react@18.3.1/es2022/react.mjs";
 
     app.get("/*", async (ctx: Context): Promise<Response> => {
+      if (ctx.req.path === "/favicon.ico") {
+        return new Response(null, { status: 404 });
+      }
+
       const req = ctx.req;
       let url = new URL(req.path, "https://esm.sh").toString();
       const query = req.query();
