@@ -2,6 +2,7 @@ import { moreStrict, parseArgs, printHelp } from "@podhmo/with-help";
 import { resolve } from "@std/path";
 import * as cache from "./vendor/denosaurs/cache/mod.ts";
 import type { Context, Hono } from "@hono/hono";
+import { BASE_URL as ESM_SH_BASE_URL } from "./esm-sh.ts";
 
 // interface Module {
 //   fetch: Deno.ServeHandler;
@@ -37,7 +38,7 @@ export function setupCacheEndpoint(app: Module, options: {
     }
 
     const req = ctx.req;
-    let url = new URL(req.path, "https://esm.sh").toString();
+    let url = new URL(req.path, ESM_SH_BASE_URL).toString();
     const query = req.query();
     if (Object.keys(query).length > 0) {
       url += `?${new URLSearchParams(query).toString()}`; // todo: sorted query string is needed (for cache)
@@ -52,7 +53,7 @@ export function setupCacheEndpoint(app: Module, options: {
       const headers = data.meta.headers ?? {};
       let location = headers["Location"] || headers["location"];
       if (location) {
-        location = location.replace("https://esm.sh", "");
+        location = location.replace(ESM_SH_BASE_URL, "");
         console.error("%credirect: %s", "color:gray", location);
         return ctx.redirect(location, status);
       }
