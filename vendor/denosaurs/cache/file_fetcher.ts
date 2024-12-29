@@ -30,7 +30,13 @@ async function protocolFile(url: URL, dest: string): Promise<Metadata> {
 }
 
 async function protocolHttp(url: URL, dest: string): Promise<Metadata> {
-  const download = await fetch(url, {headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0" }});
+  const download = await fetch(url, {
+    redirect: "manual",
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0",
+    },
+  });
   if (!download.ok) {
     throw new CacheError(download.statusText);
   }
