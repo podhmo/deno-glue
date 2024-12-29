@@ -142,15 +142,15 @@ async function path(url: URL, ns?: string): Promise<string> {
   return resolve(`${join(...path)}${extname(url.pathname)}`).replace("\0", "");
 }
 
-function metapath(url: URL, ns?: string) {
-  return resolve(`${path(url, ns)}.metadata.json`);
+async function metapath(url: URL, ns?: string) {
+  return resolve(`${await path(url, ns)}.metadata.json`);
 }
 
 async function metasave(meta: Metadata, url: URL, ns?: string): Promise<void> {
-  await Deno.writeTextFile(metapath(url, ns), JSON.stringify(meta));
+  await Deno.writeTextFile(await metapath(url, ns), JSON.stringify(meta));
 }
 
 async function metaread(url: URL, ns?: string): Promise<Metadata> {
-  const metadata = await Deno.readTextFile(metapath(url, ns));
+  const metadata = await Deno.readTextFile(await metapath(url, ns));
   return JSON.parse(metadata) as Metadata;
 }
