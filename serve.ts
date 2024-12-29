@@ -3,6 +3,7 @@ import { resolve } from "@std/path";
 import * as cache from "./vendor/denosaurs/cache/mod.ts";
 import type { Context, Hono } from "@hono/hono";
 import { BASE_URL as ESM_SH_BASE_URL } from "./esm-sh.ts";
+import { useCache as setupBaseUrlForTranspile } from "./mini-webapp.ts";
 
 // interface Module {
 //   fetch: Deno.ServeHandler;
@@ -18,17 +19,16 @@ type ServeOptions = {
   signal?: AbortSignal;
 } & Deno.ServeOptions<Deno.NetAddr>;
 
-export function setupCacheEndpoint(app: Module, options: {
+// esm-shが自分自身のパスを返すのでとりあえずすべてをproxyする
+//
+// e.g.
+// /* esm.sh - react@18.3.1 */
+// export * from "/stable/react@18.3.1/es2022/react.mjs";
+// export { default } from "/stable/react@18.3.1/es2022/react.mjs";
+export function setupCachedProxyEndpoint(app: Module, options: {
   hostname: string;
   port: number;
 }) {
-  // esm-shが自分自身のパスを返すのでとりあえずすべてをproxyする
-  //
-  // e.g.
-  // /* esm.sh - react@18.3.1 */
-  // export * from "/stable/react@18.3.1/es2022/react.mjs";
-  // export { default } from "/stable/react@18.3.1/es2022/react.mjs";
-
   app.get("/*", async (ctx: Context): Promise<Response> => {
     if (!ctx.req.url.startsWith("http")) {
       return new Response("invalid url", { status: 404 });
@@ -129,7 +129,8 @@ export async function main() {
 
   const hostname = "127.0.0.1";
   if (options.cache) {
-    setupCacheEndpoint(m.default, {
+    setupBaseUrlForTranspile("/"); // request via local endpoint
+    setupCachedProxyEndpoint(m.default, {
       hostname,
       port: options.port,
     });
