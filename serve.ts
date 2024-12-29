@@ -119,8 +119,18 @@ export async function main() {
   // TODO: type safe
   // https://docs.deno.com/deploy/api/dynamic-import/
   const specifier: string = options._[0];
-  const resolved = resolve(specifier); // to absolute path for restricted dynamic import in deno.
-  const m = await import(`file://${resolved}`);
+  let resolved = resolve(specifier); // to absolute path for restricted dynamic import in deno.
+  if (!resolved.includes("://")) {
+    resolved = `file://${resolved}`;
+  }
+  const m = await import(resolved);
+
+  if (m.default === undefined) {
+    console.error(
+      "error: serve requires `export default { fetch } ` in the main module, did you forget it?",
+    );
+    Deno.exit(1);
+  }
 
   if (options["clear-cache"]) {
     console.error("clear cache: %s/%s", cache.directory(), ns);
