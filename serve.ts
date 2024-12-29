@@ -53,9 +53,11 @@ export function serve(
 
       if (status === 301 || status === 302 || status === 303) {
         const headers = data.meta.headers ?? {};
-        const location = headers["Location"] || headers["location"];
+        let location = headers["Location"] || headers["location"];
         if (location) {
-          return ctx.redirect(location.replace("https://esm.sh", ""));
+          location = location.replace("https://esm.sh", "");
+          console.error("%credirect: %s", "color:gray", location);
+          return ctx.redirect(location, status);
         }
       }
 
