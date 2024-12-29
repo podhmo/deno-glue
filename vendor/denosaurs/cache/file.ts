@@ -51,8 +51,6 @@ export interface Metadata {
 }
 
 export class FileWrapper {
-  metapath: string;
-
   static async create(
     url: URL,
     policy?: Policy,
@@ -64,6 +62,7 @@ export class FileWrapper {
       await path(url, ns),
       policy,
       ns,
+      await metapath(url, ns),
     );
   }
 
@@ -71,11 +70,10 @@ export class FileWrapper {
     public url: URL,
     public hash: string,
     public path: string,
-    public policy?: Policy,
-    public ns?: string,
-  ) {
-    this.metapath = metapath(url, ns);
-  }
+    public policy: Policy | undefined,
+    public ns: string | undefined,
+    public metapath: string,
+  ) {}
 
   async exists(): Promise<boolean> {
     return await exists(this.path);
