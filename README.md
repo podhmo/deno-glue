@@ -9,7 +9,15 @@
 
 ## CLI
 
+bundle
+
 ```console
 $ deno run -A jsr:@podhmo/glue/bundle main.tsx
 $ deno run -A jsr:@podhmo/glue/bundle main.tsx --output-style html --html-id root
+```
+
+serve
+
+```console
+$ deno run -A jsr:@podhmo/glue/serve --port 8080 app.ts
 ```
