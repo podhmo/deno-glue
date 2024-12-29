@@ -52,6 +52,16 @@ export function serve(
       const data = await cache.cache(url, undefined, ns); // todo: passing policy
       const fileData = await Deno.readFile(data.path);
 
+      const status = data.meta.status ?? 200;
+      if (status === 301 || status === 302 || status === 303) {
+        const headers = data.meta.headers ?? {};
+        const location = headers["Location"] || headers["location"];
+        if (location) {
+          console.error("redirect to %s", location);
+          return ctx.redirect(location.replace("https://esm.sh", ""));
+        }
+      }
+
       return new Response(fileData, {
         headers: {
           ...data.meta.headers,
