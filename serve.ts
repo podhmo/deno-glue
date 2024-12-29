@@ -48,7 +48,7 @@ export function serve(
 
       console.error("%cproxy request : %s", "color:gray", url);
 
-      // confirm cache and download
+      // TODO: confirm cache and download
       const data = await cache.cache(url, undefined, ns); // todo: passing policy
       const fileData = await Deno.readFile(data.path);
 
@@ -57,7 +57,6 @@ export function serve(
         const headers = data.meta.headers ?? {};
         const location = headers["Location"] || headers["location"];
         if (location) {
-          console.error("redirect to %s", location);
           return ctx.redirect(location.replace("https://esm.sh", ""));
         }
       }
