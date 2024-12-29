@@ -1,9 +1,12 @@
 import { moreStrict, parseArgs, printHelp } from "@podhmo/with-help";
 import { resolve } from "@std/path";
+import * as cache from "@denosaurs/cache";
+import type { Context, Hono } from "@hono/hono";
 
-interface Module {
-  fetch: Deno.ServeHandler;
-}
+// interface Module {
+//   fetch: Deno.ServeHandler;
+// }
+type Module = Hono; // TODO: use standard interface
 
 type ServeOptions = {
   port: number;
@@ -13,15 +16,47 @@ type ServeOptions = {
 } & Deno.ServeOptions<Deno.NetAddr>;
 
 export function serve(
-  m: Module,
+  app: Module,
   options: ServeOptions,
 ): Deno.HttpServer<Deno.NetAddr> {
+  // activate local cache
+
+  {
+    // esm-shが自分自身のパスを返すのでとりあえずすべてをproxyする
+    //
+    // e.g.
+    // /* esm.sh - react@18.3.1 */
+    // export * from "/stable/react@18.3.1/es2022/react.mjs";
+    // export { default } from "/stable/react@18.3.1/es2022/react.mjs";
+
+    app.get("/*", async (ctx: Context): Promise<Response> => {
+      const req = ctx.req;
+      let url = new URL(req.path, "https://esm.sh").toString();
+      const query = req.query();
+      if (Object.keys(query).length > 0) {
+        url += `?${new URLSearchParams(query).toString()}`; // todo: sorted query string is needed (for cache)
+      }
+
+      console.error("%cproxy request : %s", "color:gray", url);
+
+      // confirm cache and download
+      const ns = "podhmo-glue";
+      const cached = await cache.cache(url, undefined, ns); // todo: passing policy
+      const fileData = await Deno.readFile(cached.path);
+
+      return new Response(fileData, {
+        headers: cached.meta.headers,
+        status: 200,
+      });
+    });
+  }
+
   const hostname = options.hostname ?? "127.0.0.1";
   // TODO: check if m is a Module
   return Deno.serve({
     port: options.port,
     hostname,
-    handler: m.fetch,
+    handler: app.fetch,
     signal: options.signal,
     onListen: options.onListen,
   });
