@@ -1,4 +1,5 @@
 import { moreStrict, parseArgs, printHelp } from "@podhmo/with-help";
+import { resolve } from "@std/path";
 
 interface Module {
   fetch: Deno.ServeHandler;
@@ -51,9 +52,12 @@ export async function main() {
     Deno.exit(1);
   }
 
+  // TODO: support tsx
   // TODO: type safe
-  const specifier = options._[0];
-  const m = await import(specifier);
+  // https://docs.deno.com/deploy/api/dynamic-import/
+  const specifier: string = options._[0];
+  const resolved = resolve(specifier); // to absolute path for restricted dynamic import in deno.
+  const m = await import(`file://${resolved}`);
 
   serve(m.default, {
     hostname: "127.0.0.1",
