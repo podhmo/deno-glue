@@ -49,16 +49,16 @@ export function serve(
       console.error("%cproxy request : %s", "color:gray", url);
 
       // confirm cache and download
-      const cached = await cache.cache(url, undefined, ns); // todo: passing policy
-      const fileData = await Deno.readFile(cached.path);
+      const data = await cache.cache(url, undefined, ns); // todo: passing policy
+      const fileData = await Deno.readFile(data.path);
 
       return new Response(fileData, {
         headers: {
-          ...cached.meta.headers,
+          ...data.meta.headers,
           "Access-Control-Allow-Origin":
             `http://${options.hostname}:${options.port}`,
         },
-        status: 200,
+        status: data.meta.status ?? 200,
       });
     });
   }
