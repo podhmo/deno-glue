@@ -124,7 +124,7 @@ export async function main() {
 
   if (options["clear-cache"]) {
     console.error("clear cache: %s/%s", cache.directory(), ns);
-    await cache.purge("podhmo-glue");
+    await cache.purge(ns);
   }
 
   const hostname = "127.0.0.1";
