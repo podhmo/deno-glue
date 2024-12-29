@@ -1,9 +1,4 @@
-import {
-  buildUsage,
-  moreStrict,
-  parseArgs,
-  printHelp,
-} from "@podhmo/with-help";
+import { moreStrict, parseArgs, printHelp } from "@podhmo/with-help";
 
 interface Module {
   fetch: Deno.ServeHandler;
