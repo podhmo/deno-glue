@@ -8,6 +8,8 @@ import type { Context, Hono } from "@hono/hono";
 // }
 type Module = Hono; // TODO: use standard interface
 
+const ns = "podhmo-glue"; // namespace for cache
+
 type ServeOptions = {
   port: number;
   hostname?: string;
@@ -40,7 +42,6 @@ export function serve(
       console.error("%cproxy request : %s", "color:gray", url);
 
       // confirm cache and download
-      const ns = "podhmo-glue";
       const cached = await cache.cache(url, undefined, ns); // todo: passing policy
       const fileData = await Deno.readFile(cached.path);
 
@@ -70,6 +71,7 @@ export async function main() {
 
     string: ["port"],
     required: ["port"],
+    boolean: ["clear-cache"],
     default: {
       port: "8080",
     },
@@ -93,6 +95,11 @@ export async function main() {
   const specifier: string = options._[0];
   const resolved = resolve(specifier); // to absolute path for restricted dynamic import in deno.
   const m = await import(`file://${resolved}`);
+
+  if (options["clear-cache"]) {
+    console.error("clear cache: %s/%s", cache.directory(), ns);
+    await cache.purge("podhmo-glue");
+  }
 
   serve(m.default, {
     hostname: "127.0.0.1",
