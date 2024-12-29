@@ -32,6 +32,9 @@ export function serve(
     // export { default } from "/stable/react@18.3.1/es2022/react.mjs";
 
     app.get("/*", async (ctx: Context): Promise<Response> => {
+      if (!ctx.req.url.startsWith("http")) {
+        return new Response("invalid url", { status: 404 });
+      }
       if (ctx.req.path === "/favicon.ico") {
         return new Response(null, { status: 404 });
       }
@@ -50,7 +53,11 @@ export function serve(
       const fileData = await Deno.readFile(cached.path);
 
       return new Response(fileData, {
-        headers: cached.meta.headers,
+        headers: {
+          ...cached.meta.headers,
+          "Access-Control-Allow-Origin":
+            `http://${options.hostname}:${options.port}`,
+        },
         status: 200,
       });
     });
