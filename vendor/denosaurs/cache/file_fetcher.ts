@@ -37,7 +37,12 @@ async function protocolHttp(url: URL, dest: string): Promise<Metadata> {
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0",
     },
   });
-  if (!download.ok) {
+
+  // error if not 200 or redirect
+  if (
+    !(download.status === 200 || download.status === 301 ||
+      download.status === 302 || download.status === 303)
+  ) {
     throw new CacheError(download.statusText);
   }
   const source = await download.arrayBuffer();
