@@ -1,6 +1,6 @@
 import { moreStrict, parseArgs, printHelp } from "@podhmo/with-help";
 import { resolve } from "@std/path";
-import * as cache from "@denosaurs/cache";
+import * as cache from "./vendor/denosaurs/cache/mod.ts";
 import type { Context, Hono } from "@hono/hono";
 
 // interface Module {

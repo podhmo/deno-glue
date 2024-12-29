@@ -30,7 +30,6 @@
     "@std/jsonc": "jsr:@std/jsonc@^1.0.1",
     "@std/path": "jsr:@std/path@^1.0.8",
     "@hono/hono": "jsr:@hono/hono@^4.6",
-    "@denosaurs/cache": "jsr:@denosaurs/cache@^0.2.15",
     "esbuild": "npm:esbuild-wasm@0.24.2"
   }
 }
