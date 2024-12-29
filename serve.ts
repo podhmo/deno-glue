@@ -1,5 +1,4 @@
 import { moreStrict, parseArgs, printHelp } from "@podhmo/with-help";
-import { resolve } from "@std/path";
 import * as cache from "./vendor/denosaurs/cache/mod.ts";
 import type { Context, Hono } from "@hono/hono";
 import { BASE_URL as ESM_SH_BASE_URL } from "./esm-sh.ts";
@@ -120,12 +119,11 @@ export async function main() {
   // TODO: support tsx
   // TODO: type safe
   // https://docs.deno.com/deploy/api/dynamic-import/
-  const specifier: string = options._[0];
-  let resolved = resolve(specifier); // to absolute path for restricted dynamic import in deno.
-  if (!resolved.includes("://")) {
-    resolved = `file://${resolved}`;
+  let specifier: string = options._[0];
+  if (!specifier.includes("://")) {
+    specifier = `file://${Deno.realPathSync(specifier)}`; // to absolute path for restricted dynamic import in deno.
   }
-  const m = await import(resolved);
+  const m = await import(specifier);
 
   if (m.default === undefined) {
     console.error(
