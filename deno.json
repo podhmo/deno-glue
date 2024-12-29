@@ -5,6 +5,7 @@
   "exports": {
     ".": "./mod.ts",
     "./bundle": "./bundle.ts",
+    "./serve": "./serve.ts",
     "./mini-webapp": "./mini-webapp.ts"
   },
   "publish": {
