@@ -8,6 +8,7 @@ const options = {
   baseUrl: ESM_SH_BASE_URL,
   useCache: false,
   debug: true,
+  developmentMode: false,
 };
 
 export function useCache(proxyUrl: string) {
@@ -15,11 +16,16 @@ export function useCache(proxyUrl: string) {
   options.baseUrl = proxyUrl; // request via local endpoint
 }
 
+export function useDevelopmentMode() {
+  options.developmentMode = true;
+}
+
 export function tsxToJs(filename: string): Promise<string> {
   return transpile({
     filename,
     debug: options.debug,
     baseUrl: options.baseUrl,
+    developmentMode: options.developmentMode,
   });
 }
 

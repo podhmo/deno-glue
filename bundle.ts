@@ -27,7 +27,7 @@ async function main() {
       "output-style",
       "html-id",
     ],
-    boolean: ["debug"],
+    boolean: ["debug", "development"],
     required: ["esm-sh-base-url", "output-style", "html-id"],
     default: {
       "esm-sh-base-url": ESM_SH_BASE_URL,
@@ -41,6 +41,7 @@ async function main() {
       "output-style": `output style, one of ${
         JSON.stringify(outputStyles)
       } (default: ${defaultOutputStyle})`,
+      "development": "development mode for esm.sh",
     },
   });
 
@@ -75,6 +76,7 @@ async function main() {
           denoConfigPath,
           debug: options.debug,
           baseUrl: options["esm-sh-base-url"],
+          developmentMode: options.development,
         }),
       ];
       pluginsCache.set(denoConfigPath, plugins);
@@ -103,8 +105,9 @@ async function main() {
           filename: inputFile,
           debug: options.debug,
           denoConfigPath: options["deno-config"],
-          baseUrl: options["esm-sh-base-url"],
+          baseUrl: options["esm-sh-base-url"],          
           plugins: plugins,
+          developmentMode: options.development,
         });
         const html = HTML({
           id: options["html-id"],

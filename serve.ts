@@ -2,7 +2,10 @@ import { moreStrict, parseArgs, printHelp } from "@podhmo/with-help";
 import * as cache from "./vendor/denosaurs/cache/mod.ts";
 import type { Context, Hono } from "@hono/hono";
 import { BASE_URL as ESM_SH_BASE_URL } from "./esm-sh.ts";
-import { useCache as setupBaseUrlForTranspile } from "./mini-webapp.ts";
+import {
+  useCache as setupBaseUrlForTranspile,
+  useDevelopmentMode as setupDevelopmentModeForTranspile,
+} from "./mini-webapp.ts";
 
 // interface Module {
 //   fetch: Deno.ServeHandler;
@@ -97,10 +100,13 @@ export async function main() {
 
     string: ["port"],
     required: ["port"],
-    boolean: ["clear-cache", "cache"],
+    boolean: ["clear-cache", "cache", "development"],
     negatable: ["cache"],
     default: {
       port: "8080",
+    },
+    flagDescription: {
+      "development": "development mode for esm.sh",
     },
   });
 
@@ -145,6 +151,10 @@ export async function main() {
       hostname,
       port: options.port,
     });
+  }
+
+  if (options.development) {
+    setupDevelopmentModeForTranspile();
   }
 
   serve(m.default, {
