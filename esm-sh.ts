@@ -7,9 +7,15 @@ export const BASE_URL = "https://esm.sh";
  esbuild plugin for rewriting deno's original import path to esm.sh URL
 */
 export async function PathReplacePlugin(
-  options: { denoConfigPath?: string; debug: boolean; baseUrl: string } = {
+  options: {
+    denoConfigPath?: string;
+    debug: boolean;
+    baseUrl: string;
+    developmentMode: boolean;
+  } = {
     debug: false,
     baseUrl: BASE_URL,
+    developmentMode: false,
   },
 ) {
   let baseUrl = options.baseUrl ?? BASE_URL;
@@ -97,6 +103,10 @@ export async function PathReplacePlugin(
             if (replaced.startsWith("npm:")) {
               replaced = replaced.replace("npm:", `${baseUrl}/`);
             }
+
+            if (options.developmentMode) {
+              replaced = `${replaced}?dev`; // https://esm.sh/#development-mode
+            }
             return { path: replaced, external: true };
           },
         );
@@ -113,6 +123,9 @@ export async function PathReplacePlugin(
           if (version) {
             replaced = `${replaced}@${version}`;
           }
+          if (options.developmentMode) {
+            replaced = `${replaced}?dev`; // https://esm.sh/#development-mode
+          }
           return { external: true, path: replaced };
         },
       );
@@ -127,6 +140,9 @@ export async function PathReplacePlugin(
           const version = config.specifiers[args.path + "@*"];
           if (version) {
             replaced = `${replaced}@${version}`;
+          }
+          if (options.developmentMode) {
+            replaced = `${replaced}?dev`; // https://esm.sh/#development-mode
           }
           return { external: true, path: replaced };
         },
@@ -147,17 +163,19 @@ export async function transpile(
     denoConfigPath?: string;
     baseUrl?: string;
     plugins?: esbuild.Plugin[];
+    developmentMode?: boolean;
   },
 ): Promise<string> {
   let baseUrl = BASE_URL;
   if (options.baseUrl !== undefined) {
     baseUrl = options.baseUrl;
   }
+  const developmentMode = options.developmentMode ?? false;
 
   let plugins = options.plugins;
   if (options.plugins === undefined) {
     plugins = [
-      await PathReplacePlugin({ ...options, baseUrl }),
+      await PathReplacePlugin({ ...options, developmentMode, baseUrl }),
     ];
   }
 
