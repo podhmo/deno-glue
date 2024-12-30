@@ -101,11 +101,10 @@ async function main() {
         break;
       }
       case "html": {
-        const code = await transpile({
-          filename: inputFile,
+        const code = await transpile(inputFile, {
           debug: options.debug,
           denoConfigPath: options["deno-config"],
-          baseUrl: options["esm-sh-base-url"],          
+          baseUrl: options["esm-sh-base-url"],
           plugins: plugins,
           developmentMode: options.development,
         });

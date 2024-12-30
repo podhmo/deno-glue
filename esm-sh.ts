@@ -157,8 +157,8 @@ export async function PathReplacePlugin(
 
 /** Utility for transpiling .tsx code to .js (while forwarding external dependencies to esm.sh) */
 export async function transpile(
+  filename: string,
   options: {
-    filename: string;
     debug: boolean;
     denoConfigPath?: string;
     baseUrl?: string;
@@ -181,7 +181,7 @@ export async function transpile(
 
   const b: esbuild.BuildResult = await esbuild.build({
     // inject, alias
-    entryPoints: [options.filename],
+    entryPoints: [filename],
     plugins: plugins,
     write: false,
     color: true,

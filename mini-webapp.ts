@@ -21,8 +21,7 @@ export function useDevelopmentMode() {
 }
 
 export function tsxToJs(filename: string): Promise<string> {
-  return transpile({
-    filename,
+  return transpile(filename, {
     debug: options.debug,
     baseUrl: options.baseUrl,
     developmentMode: options.developmentMode,
