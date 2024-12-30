@@ -4,7 +4,6 @@ import { exists } from "@std/fs";
 import { buildUsage, moreStrict, parseArgs } from "@podhmo/with-help";
 
 import * as esbuild from "esbuild";
-import { type BuildOptions } from "esbuild";
 import {
   BASE_URL as ESM_SH_BASE_URL,
   PathReplacePlugin,
@@ -83,7 +82,7 @@ async function main() {
 
     switch (options["output-style"]) {
       case "esm": {
-        const buildOptions: BuildOptions = {
+        const buildOptions: esbuild.BuildOptions = {
           plugins: plugins,
           entryPoints: [inputFile],
           bundle: true,
