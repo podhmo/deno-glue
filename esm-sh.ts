@@ -36,7 +36,7 @@ export async function PathReplacePlugin(
 
       // alias -> path
       for (
-        const [alias, pkg] of sortBy(
+        const [alias, { pkg, suffix }] of sortBy(
           Object.entries(config.specifiers ?? {}),
           ([k, _]) => -k.length,
         )
@@ -46,7 +46,10 @@ export async function PathReplacePlugin(
         build.onResolve(
           { filter: regexp },
           (args: esbuild.OnResolveArgs): esbuild.OnResolveResult | null => {
-            const replaced = args.path.replace(regexp, baseUrl + "/" + pkg);
+            const replaced = args.path.replace(
+              regexp,
+              baseUrl + "/" + pkg + "$1",
+            ) + suffix;
             debug(`[DEBUG] rewrite ${args.path} -> ${replaced}`);
             return { path: replaced, external: true };
           },
@@ -85,7 +88,7 @@ export async function PathReplacePlugin(
 // deno.json
 interface Config {
   imports: Record<string, string>;
-  specifiers: Record<string, string>; // alias | path -> pkg + version + suffix
+  specifiers: Record<string, { pkg: string; suffix: string }>; // alias | path -> pkg + version + suffix
 }
 
 // deno.lock
@@ -137,15 +140,17 @@ export async function loadConfig(
           const parts = alias.split("@");
           const pkg = parts.slice(0, parts.length - 1).join("@");
           if (alias.startsWith("jsr:")) {
-            config.specifiers[alias] = `jsr/${
-              pkg.substring(4)
-            }@${version}${suffix}`;
+            config.specifiers[alias] = {
+              pkg: `jsr/${pkg.substring(4)}@${version}`,
+              suffix,
+            };
           } else if (alias.startsWith("npm:")) {
-            config.specifiers[alias] = `${
-              pkg.substring(4)
-            }@${version}${suffix}`;
+            config.specifiers[alias] = {
+              pkg: `${pkg.substring(4)}@${version}`,
+              suffix,
+            };
           } else {
-            config.specifiers[alias] = `${pkg}@${version}${suffix}`;
+            config.specifiers[alias] = { pkg: `${pkg}@${version}`, suffix };
           }
         }
 
