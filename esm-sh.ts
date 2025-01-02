@@ -32,10 +32,12 @@ export async function PathReplacePlugin(
   return {
     name: "path-resolve-plugin",
     setup(build: esbuild.PluginBuild) {
-      // local deno.json's imports
+      const suffix = options.developmentMode ? "?dev" : "";
+
+      // alias -> path
       for (
         const [alias, path] of sortBy(
-          Object.entries(config.imports ?? {}),
+          Object.entries(config.specifiers ?? {}),
           ([k, _]) => -k.length,
         )
       ) {
@@ -44,22 +46,8 @@ export async function PathReplacePlugin(
         build.onResolve(
           { filter: regexp },
           (args: esbuild.OnResolveArgs): esbuild.OnResolveResult | null => {
-            debug(`[DEBUG] resolve ${args.path} -> ${path}`);
-            let replaced = args.path.replace(regexp, path);
-
-            // jsr: -> https://esm.sh/jsr/
-            if (replaced.startsWith("jsr:")) {
-              replaced = replaced.replace("jsr:", `${baseUrl}/jsr/`);
-            }
-
-            // npm: -> https://esm.sh/
-            if (replaced.startsWith("npm:")) {
-              replaced = replaced.replace("npm:", `${baseUrl}/`);
-            }
-
-            if (options.developmentMode) {
-              replaced = `${replaced}?dev`; // https://esm.sh/#development-mode
-            }
+            const replaced = args.path.replace(regexp, baseUrl + "/" + path);
+            debug(`[DEBUG] rewrite ${args.path} -> ${replaced}`);
             return { path: replaced, external: true };
           },
         );
@@ -70,16 +58,9 @@ export async function PathReplacePlugin(
       build.onResolve(
         { filter: /^jsr:/ },
         (args: esbuild.OnResolveArgs): esbuild.OnResolveResult | null => {
-          debug(`[DEBUG] resolve ${args.path}`);
-          let replaced = args.path.replace(/^jsr:/, `${baseUrl}/jsr/`);
-          const version = config.specifiers[args.path + "@*"];
-          if (version) {
-            replaced = `${replaced}@${version}`;
-          }
-          if (options.developmentMode) {
-            replaced = `${replaced}?dev`; // https://esm.sh/#development-mode
-          }
-          return { external: true, path: replaced };
+          const replaced = args.path.replace(/^jsr:/, `${baseUrl}/jsr/`);
+          debug(`[DEBUG] rewrite jsr: ${args.path} -> ${replaced}${suffix}`);
+          return { external: true, path: replaced + suffix };
         },
       );
 
@@ -88,16 +69,9 @@ export async function PathReplacePlugin(
       build.onResolve(
         { filter: /^npm:/ },
         (args: esbuild.OnResolveArgs): esbuild.OnResolveResult | null => {
-          debug(`[DEBUG] resolve ${args.path}`);
-          let replaced = args.path.replace(/^npm:/, `${baseUrl}/`);
-          const version = config.specifiers[args.path + "@*"];
-          if (version) {
-            replaced = `${replaced}@${version}`;
-          }
-          if (options.developmentMode) {
-            replaced = `${replaced}?dev`; // https://esm.sh/#development-mode
-          }
-          return { external: true, path: replaced };
+          const replaced = args.path.replace(/^npm:/, `${baseUrl}/`);
+          debug(`[DEBUG] rewrite npm: ${args.path} -> ${replaced}${suffix}`);
+          return { external: true, path: replaced + suffix };
         },
       );
 
