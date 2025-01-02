@@ -19,7 +19,7 @@ export async function main(
   baseOptions: { debug: boolean } = { debug: false },
 ) {
   const options_ = parseArgs(args, {
-    name: "mini-bundle",
+    name: "glue bundle",
     usageText: `${buildUsage({ name: "mini-bundle" })} <filename>...`,
     description: "外部の依存は可能な限りesm.shの方に任せる bundler",
 
