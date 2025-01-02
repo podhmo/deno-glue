@@ -3,10 +3,11 @@
     "lib": ["deno.ns", "dom"]
   },
   "tasks": {
-    "serve": "deno run --allow-net --allow-read --allow-env --allow-run ./main.ts --port 8080"
+    "serve": "deno run --allow-net --allow-read --allow-env --allow-run ./main.ts --port 8080",
+    "bundle": "deno run -A ../../bundle.ts ./client.tsx --development"
   },
   "imports": {
     "@std/jsonc": "jsr:@std/jsonc@^1.0.1",
-    "esbuild": "npm:esbuild@^0.24.2"
+    "esbuild": "npm:esbuild-wasm@^0.24.2"
   }
 }
