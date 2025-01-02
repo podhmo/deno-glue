@@ -1,6 +1,6 @@
 import { moreStrict, parseArgs, printHelp } from "@podhmo/with-help";
 
-const commands = ["bundle", "serve"] as const;
+const commands = ["bundle", "serve", "init"] as const;
 
 export async function main() {
   const options = parseArgs(Deno.args, {
@@ -16,6 +16,7 @@ export async function main() {
       "Commands:",
       "  bundle <filename>  bundle file",
       "  serve              serve file",
+      "  init               init project",
     ].join("\n"),
   });
   if (options._.length === 0) {
@@ -37,6 +38,11 @@ export async function main() {
     }
     case "serve": {
       const { main } = await import("./serve.ts");
+      await main(restArgs, options);
+      break;
+    }
+    case "init": {
+      const { main } = await import("./init.ts");
       await main(restArgs, options);
       break;
     }
