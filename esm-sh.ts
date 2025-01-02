@@ -132,25 +132,38 @@ export async function loadConfig(
       );
 
       // https://esm.sh/#development-mode
-      const suffix = options.developmentMode ? "?dev" : "";
+      const globalSuffix = options.developmentMode ? ["dev"] : [];
 
       if (lockConfig.specifiers !== undefined) {
         // e.g. {"npm:react@18": version=18.3.1}
-        for (const [alias, version] of Object.entries(lockConfig.specifiers)) {
+        for (
+          const [alias, version_and_deps] of Object.entries(
+            lockConfig.specifiers,
+          )
+        ) {
+          let suffix: string[] = globalSuffix;
+          const [version, ...deps] = version_and_deps.split("_"); // TODO: handling deps
+          if (deps.length > 0) {
+            suffix = suffix.concat([`deps=${deps.join(",")}`]);
+          }
+
           const parts = alias.split("@");
           const pkg = parts.slice(0, parts.length - 1).join("@");
           if (alias.startsWith("jsr:")) {
             config.specifiers[alias] = {
               pkg: `jsr/${pkg.substring(4)}@${version}`,
-              suffix,
+              suffix: suffix.length === 0 ? "" : "?" + suffix.join("&"),
             };
           } else if (alias.startsWith("npm:")) {
             config.specifiers[alias] = {
               pkg: `${pkg.substring(4)}@${version}`,
-              suffix,
+              suffix: suffix.length === 0 ? "" : "?" + suffix.join("&"),
             };
           } else {
-            config.specifiers[alias] = { pkg: `${pkg}@${version}`, suffix };
+            config.specifiers[alias] = {
+              pkg: `${pkg}@${version}`,
+              suffix: suffix.length === 0 ? "" : "?" + suffix.join("&"),
+            };
           }
         }
 
