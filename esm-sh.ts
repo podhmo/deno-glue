@@ -24,7 +24,10 @@ export async function PathReplacePlugin(
   }
 
   const debug = options.debug ? console.error : () => {};
-  const config = await loadConfig(options.denoConfigPath, { debug });
+  const config = await loadConfig(options.denoConfigPath, {
+    debug,
+    developmentMode: options.developmentMode,
+  });
 
   return {
     name: "path-resolve-plugin",
@@ -121,7 +124,7 @@ interface LockConfig {
 
 export async function loadConfig(
   denoConfigPath: string | undefined, // deno.json
-  options: { debug: (_: string) => void },
+  options: { debug: (_: string) => void; developmentMode: boolean },
 ): Promise<Config> {
   const debug = options.debug;
 
@@ -151,17 +154,24 @@ export async function loadConfig(
         ),
       );
 
+      // https://esm.sh/#development-mode
+      const suffix = options.developmentMode ? "?dev" : "";
+
       if (lockConfig.specifiers !== undefined) {
         // e.g. {"npm:react@18": version=18.3.1}
         for (const [alias, version] of Object.entries(lockConfig.specifiers)) {
           const parts = alias.split("@");
           const pkg = parts.slice(0, parts.length - 1).join("@");
           if (alias.startsWith("jsr:")) {
-            config.specifiers[alias] = `jsr/${pkg.substring(4)}@${version}`;
+            config.specifiers[alias] = `jsr/${
+              pkg.substring(4)
+            }@${version}${suffix}`;
           } else if (alias.startsWith("npm:")) {
-            config.specifiers[alias] = `${pkg.substring(4)}@${version}`;
+            config.specifiers[alias] = `${
+              pkg.substring(4)
+            }@${version}${suffix}`;
           } else {
-            config.specifiers[alias] = `${pkg}@${version}`;
+            config.specifiers[alias] = `${pkg}@${version}${suffix}`;
           }
 
           debug(
