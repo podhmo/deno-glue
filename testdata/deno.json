@@ -1,0 +1,6 @@
+{
+    "imports": {
+        "preact": "npm:preact@*",
+        "@hono/hono": "jsr:@hono/hono@^4.6"
+    }
+}
