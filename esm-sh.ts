@@ -1,7 +1,21 @@
 import * as esbuild from "esbuild";
 import * as jsonc from "@std/jsonc";
-
+import { sortBy } from "jsr:@std/collections@1.0.9/sort-by";
 export const BASE_URL = "https://esm.sh";
+
+// deno.json
+interface Config {
+  imports: Record<string, string>;
+  specifiers: Record<string, string>; // copy from deno.lock
+}
+
+// deno.lock
+interface LockConfig {
+  specifiers: Record<string, string>;
+  jsr?: Record<string, { integrity: string; dependencies?: string[] }>;
+  npm?: Record<string, { integrity: string; dependencies?: string[] }>;
+  workspace: { dependencies: string[] };
+}
 
 /**
  esbuild plugin for rewriting deno's original import path to esm.sh URL
@@ -21,17 +35,6 @@ export async function PathReplacePlugin(
   let baseUrl = options.baseUrl ?? BASE_URL;
   if (baseUrl.endsWith("/")) {
     baseUrl = baseUrl.slice(0, -1);
-  }
-
-  // deno.json
-  interface Config {
-    imports: Record<string, string>;
-    specifiers: Record<string, string>;
-  }
-
-  // deno.lock
-  interface LockConfig {
-    specifiers: Record<string, string>;
   }
 
   const debug = options.debug ? console.error : () => {};
@@ -85,7 +88,12 @@ export async function PathReplacePlugin(
     name: "path-resolve-plugin",
     setup(build: esbuild.PluginBuild) {
       // local deno.json's imports
-      for (const [alias, path] of Object.entries(config.imports ?? {})) {
+      for (
+        const [alias, path] of sortBy(
+          Object.entries(config.imports ?? {}),
+          ([k, _]) => -k.length,
+        )
+      ) {
         debug(`[DEBUG] setup resolve ${alias} -> ${path}`);
         const regexp = new RegExp(`^${alias}(/|$)`);
         build.onResolve(
