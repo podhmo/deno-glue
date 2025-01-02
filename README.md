@@ -21,3 +21,10 @@ serve
 ```console
 $ deno run -A jsr:@podhmo/glue serve --port 8080 app.ts
 ```
+
+init
+
+```console
+# generate client.tsx and main.ts
+$ deno run -A jsr:@podhmo/glue init
+```
