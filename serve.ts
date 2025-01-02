@@ -116,11 +116,12 @@ export async function main(
     name: name,
     usageText: `Usage: ${name} [options] <specifier>`,
 
-    string: ["port"],
-    required: ["port"],
+    string: ["port", "host"],
+    required: ["port", "host"],
     boolean: ["clear-cache", "cache", "development", "debug"],
     negatable: ["cache"],
     default: {
+      host: "127.0.0.1",
       port: "8080",
       debug: baseOptions.debug,
     },
@@ -161,10 +162,9 @@ export async function main(
     await clearCache();
   }
 
-  const hostname = "127.0.0.1";
   const server = serve(m.default, {
+    hostname: options.host,
     port: options.port,
-    hostname,
     cache: options.cache,
     development: options.development,
   });
