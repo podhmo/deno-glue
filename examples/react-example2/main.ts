@@ -1,5 +1,7 @@
 import { Context, Hono } from "jsr:@hono/hono@4.6.14";
-import { HTML, tsxToJs } from "../../mini-webapp.ts";
+
+import { transpile as tsxToJs } from "../../esm-sh.ts";
+import { HTML } from "../../mini-webapp.ts";
 import { parseArgs } from "jsr:@podhmo/with-help@0.5.3";
 
 const options = parseArgs(Deno.args, {
@@ -17,9 +19,8 @@ const options = parseArgs(Deno.args, {
 const app = new Hono();
 
 app.get("/", async (ctx: Context) => {
-  const clientSideCode = await tsxToJs({
+  const clientSideCode = await tsxToJs(options.code, {
     debug: options.debug,
-    filename: options.code,
     denoConfigPath: options["deno-config"],
   });
 
@@ -32,9 +33,8 @@ app.get("/", async (ctx: Context) => {
 });
 
 if (options.debug) {
-  const clientSideCode = await tsxToJs({
+  const clientSideCode = await tsxToJs(options.code, {
     debug: true,
-    filename: options.code,
     denoConfigPath: options["deno-config"],
   });
   console.error(clientSideCode);
