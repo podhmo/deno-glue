@@ -14,7 +14,8 @@
       "LICENSE",
       "deno.json",
       "*.ts",
-      "vendor/**/*.ts"
+      "vendor/**/*.ts",
+      "examples/**/*"
     ]
   },
   "tasks": {

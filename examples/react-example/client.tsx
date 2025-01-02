@@ -2,9 +2,8 @@
 /** @jsxImportSource npm:react@18 */
 /** @jsxImportSourceTypes npm:@types/react@18 */
 
-import { StrictMode } from "npm:react@18";
+import { StrictMode, useState } from "npm:react@18";
 import { createRoot } from "npm:react-dom@18/client";
-import { useState } from "npm:react@18";
 
 // ----------------------------------------
 // components
