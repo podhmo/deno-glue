@@ -36,17 +36,17 @@ export async function PathReplacePlugin(
 
       // alias -> path
       for (
-        const [alias, path] of sortBy(
+        const [alias, pkg] of sortBy(
           Object.entries(config.specifiers ?? {}),
           ([k, _]) => -k.length,
         )
       ) {
-        debug(`[DEBUG] setup resolve ${alias} -> ${path}`);
+        debug(`[DEBUG] setup resolve ${alias} -> ${baseUrl}/${pkg}`);
         const regexp = new RegExp(`^${alias}(/|$)`);
         build.onResolve(
           { filter: regexp },
           (args: esbuild.OnResolveArgs): esbuild.OnResolveResult | null => {
-            const replaced = args.path.replace(regexp, baseUrl + "/" + path);
+            const replaced = args.path.replace(regexp, baseUrl + "/" + pkg);
             debug(`[DEBUG] rewrite ${args.path} -> ${replaced}`);
             return { path: replaced, external: true };
           },
@@ -54,7 +54,7 @@ export async function PathReplacePlugin(
       }
 
       // jsr: -> https://esm.sh/jsr/
-      debug(`[DEBUG] setup resolve jsr: -> ${baseUrl}/jsr/`);
+      debug(`[DEBUG] setup resolve jsr:*: -> ${baseUrl}/jsr/*`);
       build.onResolve(
         { filter: /^jsr:/ },
         (args: esbuild.OnResolveArgs): esbuild.OnResolveResult | null => {
@@ -65,7 +65,7 @@ export async function PathReplacePlugin(
       );
 
       // npm: -> https://esm.sh/
-      debug(`[DEBUG] setup resolve npm: -> ${baseUrl}/`);
+      debug(`[DEBUG] setup resolve npm:* -> ${baseUrl}/*`);
       build.onResolve(
         { filter: /^npm:/ },
         (args: esbuild.OnResolveArgs): esbuild.OnResolveResult | null => {
@@ -147,10 +147,6 @@ export async function loadConfig(
           } else {
             config.specifiers[alias] = `${pkg}@${version}${suffix}`;
           }
-
-          debug(
-            `[DEBUG] locked version ${alias} -> ${config.specifiers[alias]}`,
-          );
         }
 
         // e.g. {"@hono/hono": "jsr/@hono/hono@4.6.15"}
@@ -159,7 +155,6 @@ export async function loadConfig(
           if (specifier) {
             config.specifiers[alias] = specifier;
             delete config.specifiers[path]; // simplify
-            debug(`[DEBUG] locked version ${alias} -> ${specifier}`);
           }
         }
       }
