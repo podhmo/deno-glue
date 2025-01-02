@@ -14,13 +14,6 @@ type Module = Hono; // TODO: use standard interface
 
 const ns = "podhmo-glue"; // namespace for cache
 
-type ServeOptions = {
-  port: number;
-  hostname?: string;
-  handler: Deno.ServeHandler;
-  signal?: AbortSignal;
-} & Deno.ServeOptions<Deno.NetAddr>;
-
 // esm-shが自分自身のパスを返すのでとりあえずすべてをproxyする
 //
 // e.g.
@@ -75,11 +68,33 @@ export function setupCachedProxyEndpoint(app: Module, options: {
 
 export function serve(
   app: Module,
-  options: ServeOptions,
+  options: Deno.ServeOptions<Deno.NetAddr> & {
+    port: number;
+    hostname: string;
+    signal?: AbortSignal;
+
+    cache: boolean;
+    development: boolean;
+  },
 ): Deno.HttpServer<Deno.NetAddr> {
-  const hostname = options.hostname ?? "127.0.0.1";
+  const hostname = options.hostname;
+  const port = options.port;
+
+  // activate local cache
+  if (options.cache) {
+    setupBaseUrlForTranspile("/"); // request via local endpoint
+    setupCachedProxyEndpoint(app, {
+      hostname,
+      port,
+    });
+  }
+
+  if (options.development) {
+    setupDevelopmentModeForTranspile();
+  }
+
   return Deno.serve({
-    port: options.port,
+    port,
     hostname,
     handler: app.fetch,
     signal: options.signal,
@@ -147,24 +162,14 @@ export async function main(
   }
 
   const hostname = "127.0.0.1";
-
-  // activate local cache
-  if (options.cache) {
-    setupBaseUrlForTranspile("/"); // request via local endpoint
-    setupCachedProxyEndpoint(m.default, {
-      hostname,
-      port: options.port,
-    });
-  }
-
-  if (options.development) {
-    setupDevelopmentModeForTranspile();
-  }
-
-  serve(m.default, {
-    hostname,
+  const server = serve(m.default, {
     port: options.port,
-    handler: m.fetch,
+    hostname,
+    cache: options.cache,
+    development: options.development,
+  });
+  server.finished.then(() => {
+    console.error("server finished");
   });
 }
 
