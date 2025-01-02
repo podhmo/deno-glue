@@ -1,4 +1,4 @@
-import { moreStrict, parseArgs } from "jsr:@podhmo/with-help";
+import { moreStrict, parseArgs } from "@podhmo/with-help";
 const candidates = ["serve"] as const;
 
 export async function main(

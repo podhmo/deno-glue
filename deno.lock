@@ -2,7 +2,6 @@
   "version": "4",
   "specifiers": {
     "jsr:@hono/hono@4.6.15": "4.6.15",
-    "jsr:@podhmo/with-help@*": "0.5.3",
     "jsr:@podhmo/with-help@0.5": "0.5.3",
     "jsr:@std/cli@1": "1.0.9",
     "jsr:@std/fs@1.0.4": "1.0.4",
