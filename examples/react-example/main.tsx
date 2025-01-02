@@ -27,9 +27,8 @@ app.get("/", async (ctx: Context) => {
 });
 
 async function generateClientSideCode(): Promise<string> {
-  return await transpile({
+  return await transpile("./client.tsx", {
     debug: true,
-    filename: "./client.tsx",
     denoConfigPath: "./deno.json",
   });
 }

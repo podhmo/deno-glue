@@ -14,8 +14,11 @@ import { HTML } from "./mini-webapp.ts";
 const outputStyles = ["esm", "html"] as const;
 const defaultOutputStyle = "esm";
 
-async function main() {
-  const options_ = parseArgs(Deno.args, {
+export async function main(
+  args: string[] = Deno.args,
+  baseOptions: { debug: boolean } = { debug: false },
+) {
+  const options_ = parseArgs(args, {
     name: "mini-bundle",
     usageText: `${buildUsage({ name: "mini-bundle" })} <filename>...`,
     description: "外部の依存は可能な限りesm.shの方に任せる bundler",
@@ -33,6 +36,7 @@ async function main() {
       "esm-sh-base-url": ESM_SH_BASE_URL,
       "output-style": defaultOutputStyle,
       "html-id": "root",
+      "debug": baseOptions.debug,
     },
 
     flagDescription: {
