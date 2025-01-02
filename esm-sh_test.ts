@@ -8,12 +8,12 @@ Deno.test("loadConfig", async () => {
   );
 
   const want = {
-    "@hono/hono": "jsr/@hono/hono@4.6.15",
-    "npm:@types/react@18": "@types/react@18.3.18",
-    "preact": "preact@10.5.13",
-    "npm:preact@10.5.13": "preact@10.5.13",
-    "npm:react-dom@18": "react-dom@18.3.1_react@18.3.1",
-    "npm:react@18": "react@18.3.1",
+    "npm:@types/react@18": { pkg: "@types/react@18.3.18", suffix: "" },
+    "npm:preact@10.5.13": { pkg: "preact@10.5.13", suffix: "" },
+    "npm:react-dom@18": { pkg: "react-dom@18.3.1_react@18.3.1", suffix: "" },
+    "npm:react@18": { pkg: "react@18.3.1", suffix: "" },
+    "preact": { pkg: "preact@10.5.13", suffix: "" },
+    "@hono/hono": { pkg: "jsr/@hono/hono@4.6.15", suffix: "" },
   };
 
   const got = config.specifiers;
@@ -27,12 +27,15 @@ Deno.test("loadConfig with development", async () => {
   );
 
   const want = {
-    "@hono/hono": "jsr/@hono/hono@4.6.15?dev",
-    "npm:@types/react@18": "@types/react@18.3.18?dev",
-    "preact": "preact@10.5.13?dev",
-    "npm:preact@10.5.13": "preact@10.5.13?dev",
-    "npm:react-dom@18": "react-dom@18.3.1_react@18.3.1?dev",
-    "npm:react@18": "react@18.3.1?dev",
+    "npm:@types/react@18": { pkg: "@types/react@18.3.18", suffix: "?dev" },
+    "npm:preact@10.5.13": { pkg: "preact@10.5.13", suffix: "?dev" },
+    "npm:react-dom@18": {
+      pkg: "react-dom@18.3.1_react@18.3.1",
+      suffix: "?dev",
+    },
+    "npm:react@18": { pkg: "react@18.3.1", suffix: "?dev" },
+    "preact": { pkg: "preact@10.5.13", suffix: "?dev" },
+    "@hono/hono": { pkg: "jsr/@hono/hono@4.6.15", suffix: "?dev" },
   };
 
   const got = config.specifiers;
