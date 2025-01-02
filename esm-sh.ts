@@ -108,7 +108,7 @@ export async function PathReplacePlugin(
 // deno.json
 interface Config {
   imports: Record<string, string>;
-  specifiers: Record<string, string>; // copy from deno.lock
+  specifiers: Record<string, string>; // alias | path -> pkg + version + suffix
 }
 
 // deno.lock
@@ -119,7 +119,7 @@ interface LockConfig {
   workspace: { dependencies: string[] };
 }
 
-async function loadConfig(
+export async function loadConfig(
   denoConfigPath: string | undefined, // deno.json
   options: { debug: (_: string) => void },
 ): Promise<Config> {
@@ -150,18 +150,32 @@ async function loadConfig(
           denoConfigPath.replace("deno.json", "deno.lock"),
         ),
       );
-      config.specifiers = lockConfig.specifiers;
+
       if (lockConfig.specifiers !== undefined) {
+        // e.g. {"npm:react@18": version=18.3.1}
+        for (const [alias, version] of Object.entries(lockConfig.specifiers)) {
+          const parts = alias.split("@");
+          const pkg = parts.slice(0, parts.length - 1).join("@");
+          if (alias.startsWith("jsr:")) {
+            config.specifiers[alias] = `jsr/${pkg.substring(4)}@${version}`;
+          } else if (alias.startsWith("npm:")) {
+            config.specifiers[alias] = `${pkg.substring(4)}@${version}`;
+          } else {
+            config.specifiers[alias] = `${pkg}@${version}`;
+          }
+
+          debug(
+            `[DEBUG] locked version ${alias} -> ${config.specifiers[alias]}`,
+          );
+        }
+
+        // e.g. {"@hono/hono": "jsr/@hono/hono@4.6.15"}
         for (const [alias, path] of Object.entries(config.imports)) {
-          const version = lockConfig.specifiers[path];
-          if (version) {
-            const parts = path.split("@");
-            // e.g. jsr:@std/collections@^1.0.9 ->  jsr:@std/collections@1.0.9 (from deno.lock)
-            config.imports[alias] = parts.slice(0, parts.length - 1).join("@") +
-              `@${version}`;
-            debug(
-              `[DEBUG] locked version ${alias} -> ${config.imports[alias]}`,
-            );
+          const specifier = config.specifiers[path];
+          if (specifier) {
+            config.specifiers[alias] = specifier;
+            delete config.specifiers[path]; // simplify
+            debug(`[DEBUG] locked version ${alias} -> ${specifier}`);
           }
         }
       }
