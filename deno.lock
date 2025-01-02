@@ -15,7 +15,9 @@
     "jsr:@std/path@1.0.6": "1.0.6",
     "jsr:@std/path@^1.0.6": "1.0.8",
     "jsr:@std/path@^1.0.8": "1.0.8",
-    "npm:esbuild-wasm@0.24.2": "0.24.2"
+    "npm:esbuild-wasm@0.24.2": "0.24.2",
+    "npm:preact@*": "10.5.13",
+    "npm:preact@10.5.13": "10.5.13"
   },
   "jsr": {
     "@hono/hono@4.6.15": {
@@ -73,6 +75,9 @@
   "npm": {
     "esbuild-wasm@0.24.2": {
       "integrity": "sha512-03/7Z1gD+ohDnScFztvI4XddTAbKVmMEzCvvkBpQdWKEXJ+73dTyeNrmdxP1Q0zpDMFjzUJwtK4rLjqwiHbzkw=="
+    },
+    "preact@10.5.13": {
+      "integrity": "sha512-q/vlKIGNwzTLu+jCcvywgGrt+H/1P/oIRSD6mV4ln3hmlC+Aa34C7yfPI4+5bzW8pONyVXYS7SvXosy2dKKtWQ=="
     }
   },
   "workspace": {
