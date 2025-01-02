@@ -92,18 +92,22 @@ export async function clearCache(): Promise<boolean> {
   return await cache.purge(ns);
 }
 
-export async function main() {
-  const name = "serve";
-  const options_ = parseArgs(Deno.args, {
+export async function main(
+  args: string[] = Deno.args,
+  baseOptions: { debug: boolean } = { debug: false },
+) {
+  const name = "glue serve";
+  const options_ = parseArgs(args, {
     name: name,
     usageText: `Usage: ${name} [options] <specifier>`,
 
     string: ["port"],
     required: ["port"],
-    boolean: ["clear-cache", "cache", "development"],
+    boolean: ["clear-cache", "cache", "development", "debug"],
     negatable: ["cache"],
     default: {
       port: "8080",
+      debug: baseOptions.debug,
     },
     flagDescription: {
       "development": "development mode for esm.sh",
