@@ -3,20 +3,6 @@ import * as jsonc from "@std/jsonc";
 import { sortBy } from "jsr:@std/collections@1.0.9/sort-by";
 export const BASE_URL = "https://esm.sh";
 
-// deno.json
-interface Config {
-  imports: Record<string, string>;
-  specifiers: Record<string, string>; // copy from deno.lock
-}
-
-// deno.lock
-interface LockConfig {
-  specifiers: Record<string, string>;
-  jsr?: Record<string, { integrity: string; dependencies?: string[] }>;
-  npm?: Record<string, { integrity: string; dependencies?: string[] }>;
-  workspace: { dependencies: string[] };
-}
-
 /**
  esbuild plugin for rewriting deno's original import path to esm.sh URL
 */
@@ -38,51 +24,7 @@ export async function PathReplacePlugin(
   }
 
   const debug = options.debug ? console.error : () => {};
-
-  let config: Config = { imports: {}, specifiers: {} }; // deno.json
-  if (options.denoConfigPath) {
-    debug(`[DEBUG] load deno.json from ${options.denoConfigPath}`);
-    if (options.denoConfigPath.endsWith(".jsonc")) {
-      const text = await Deno.readTextFile(options.denoConfigPath);
-      config = JSON.parse(JSON.stringify(jsonc.parse(text)));
-    } else {
-      const text = await Deno.readTextFile(options.denoConfigPath);
-      config = JSON.parse(text);
-    }
-
-    if (config.imports == undefined) {
-      config.imports = {};
-    }
-    if (config.specifiers == undefined) {
-      config.specifiers = {};
-    }
-
-    try {
-      debug(`[DEBUG] load deno.lock from ${options.denoConfigPath}`);
-      const lockConfig: LockConfig = JSON.parse(
-        await Deno.readTextFile(
-          options.denoConfigPath.replace("deno.json", "deno.lock"),
-        ),
-      );
-      config.specifiers = lockConfig.specifiers;
-      if (lockConfig.specifiers !== undefined) {
-        for (const [alias, path] of Object.entries(config.imports)) {
-          const version = lockConfig.specifiers[path];
-          if (version) {
-            const parts = path.split("@");
-            // e.g. jsr:@std/collections@^1.0.9 ->  jsr:@std/collections@1.0.9 (from deno.lock)
-            config.imports[alias] = parts.slice(0, parts.length - 1).join("@") +
-              `@${version}`;
-            debug(
-              `[DEBUG] locked version ${alias} -> ${config.imports[alias]}`,
-            );
-          }
-        }
-      }
-    } catch (e) {
-      debug(`[WARN] no deno.lock found: ${e}`);
-    }
-  }
+  const config = await loadConfig(options.denoConfigPath, { debug });
 
   return {
     name: "path-resolve-plugin",
@@ -161,6 +103,73 @@ export async function PathReplacePlugin(
       // });
     },
   };
+}
+
+// deno.json
+interface Config {
+  imports: Record<string, string>;
+  specifiers: Record<string, string>; // copy from deno.lock
+}
+
+// deno.lock
+interface LockConfig {
+  specifiers: Record<string, string>;
+  jsr?: Record<string, { integrity: string; dependencies?: string[] }>;
+  npm?: Record<string, { integrity: string; dependencies?: string[] }>;
+  workspace: { dependencies: string[] };
+}
+
+async function loadConfig(
+  denoConfigPath: string | undefined, // deno.json
+  options: { debug: (_: string) => void },
+): Promise<Config> {
+  const debug = options.debug;
+
+  let config: Config = { imports: {}, specifiers: {} }; // deno.json
+  if (denoConfigPath) {
+    debug(`[DEBUG] load deno.json from ${denoConfigPath}`);
+    if (denoConfigPath.endsWith(".jsonc")) {
+      const text = await Deno.readTextFile(denoConfigPath);
+      config = JSON.parse(JSON.stringify(jsonc.parse(text)));
+    } else {
+      const text = await Deno.readTextFile(denoConfigPath);
+      config = JSON.parse(text);
+    }
+
+    if (config.imports == undefined) {
+      config.imports = {};
+    }
+    if (config.specifiers == undefined) {
+      config.specifiers = {};
+    }
+
+    try {
+      debug(`[DEBUG] load deno.lock from ${denoConfigPath}`);
+      const lockConfig: LockConfig = JSON.parse(
+        await Deno.readTextFile(
+          denoConfigPath.replace("deno.json", "deno.lock"),
+        ),
+      );
+      config.specifiers = lockConfig.specifiers;
+      if (lockConfig.specifiers !== undefined) {
+        for (const [alias, path] of Object.entries(config.imports)) {
+          const version = lockConfig.specifiers[path];
+          if (version) {
+            const parts = path.split("@");
+            // e.g. jsr:@std/collections@^1.0.9 ->  jsr:@std/collections@1.0.9 (from deno.lock)
+            config.imports[alias] = parts.slice(0, parts.length - 1).join("@") +
+              `@${version}`;
+            debug(
+              `[DEBUG] locked version ${alias} -> ${config.imports[alias]}`,
+            );
+          }
+        }
+      }
+    } catch (e) {
+      debug(`[WARN] no deno.lock found: ${e}`);
+    }
+  }
+  return config;
 }
 
 /** Utility for transpiling .tsx code to .js (while forwarding external dependencies to esm.sh) */
