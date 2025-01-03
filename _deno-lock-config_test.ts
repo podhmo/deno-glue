@@ -1,4 +1,4 @@
-import { assertEquals } from "jsr:@std/assert/equals";
+import { assertEquals } from "@std/assert/equals";
 
 import { DependenciesScanner } from "./_deno-lock-config.ts";
 import type { LockConfig } from "./_deno-lock-config.ts";

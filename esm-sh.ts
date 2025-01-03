@@ -1,6 +1,6 @@
 import * as esbuild from "esbuild";
 import * as jsonc from "@std/jsonc";
-import { sortBy } from "jsr:@std/collections@1.0.9/sort-by";
+import { sortBy } from "@std/collections/sort-by";
 
 import { DependenciesScanner } from "./_deno-lock-config.ts";
 import type { LockConfig } from "./_deno-lock-config.ts";
