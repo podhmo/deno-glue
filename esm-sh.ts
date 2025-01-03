@@ -1,6 +1,9 @@
 import * as esbuild from "esbuild";
 import * as jsonc from "@std/jsonc";
 import { sortBy } from "jsr:@std/collections@1.0.9/sort-by";
+
+import type { LockConfig } from "./_deno-lock-config.ts";
+
 export const BASE_URL = "https://esm.sh";
 
 /**
@@ -89,14 +92,6 @@ export async function PathReplacePlugin(
 interface Config {
   imports: Record<string, string>;
   specifiers: Record<string, { pkg: string; suffix: string }>; // alias | path -> pkg + version + suffix
-}
-
-// deno.lock
-interface LockConfig {
-  specifiers: Record<string, string>;
-  jsr?: Record<string, { integrity: string; dependencies?: string[] }>;
-  npm?: Record<string, { integrity: string; dependencies?: string[] }>;
-  workspace: { dependencies: string[] };
 }
 
 export async function loadConfig(
