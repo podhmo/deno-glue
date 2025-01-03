@@ -34,8 +34,8 @@ export async function main(
         debug: options.debug,
       });
       await copyFile({
-        from: "./examples/serve-command-example/main.ts",
-        to: "./main.ts",
+        from: "./examples/serve-command-example/app.ts",
+        to: "./app.ts",
         debug: options.debug,
       });
       break;
