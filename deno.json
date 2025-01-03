@@ -20,7 +20,7 @@
   },
   "tasks": {
     "check": "deno check *.ts",
-    "ok": "deno lint && deno task check && deno test"
+    "ok": "deno lint && deno task check && deno test --allow-read --allow-write --allow-net"
   },
   "fmt": {
     "exclude": [
