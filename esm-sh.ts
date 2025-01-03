@@ -2,6 +2,7 @@ import * as esbuild from "esbuild";
 import * as jsonc from "@std/jsonc";
 import { sortBy } from "jsr:@std/collections@1.0.9/sort-by";
 
+import { DependenciesScanner } from "./_deno-lock-config.ts";
 import type { LockConfig } from "./_deno-lock-config.ts";
 
 export const BASE_URL = "https://esm.sh";
@@ -131,15 +132,19 @@ export async function loadConfig(
 
       if (lockConfig.specifiers !== undefined) {
         // e.g. {"npm:react@18": version=18.3.1}
+
+        const depScanner = DependenciesScanner.fromLockConfig(lockConfig);
         for (
-          const [alias, version_and_deps] of Object.entries(
+          const [alias, specifier] of Object.entries(
             lockConfig.specifiers,
           )
         ) {
           let suffix: string[] = globalSuffix;
-          const [version, ...deps] = version_and_deps.split("_"); // TODO: handling deps
+          const version = specifier.split("_")[0]; // TODO: handling deps
+
+          const deps = depScanner.scanDependencies(alias);
           if (deps.length > 0) {
-            suffix = suffix.concat([`deps=${deps.join(",")}`]);
+            suffix = suffix.concat(`deps=${deps.join(",")}`);
           }
 
           const parts = alias.split("@");
