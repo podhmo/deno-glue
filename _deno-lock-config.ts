@@ -83,7 +83,11 @@ export class DependenciesScanner {
       key = key.substring(4); // trim npm: for depenencies layout
     }
 
-    return this.#walk(key).slice(1); // the first element is itself, so remove it.
+    const dependencies = this.#walk(key);
+    // the first element is itself, so remove it.
+    const retval = Array.from(new Set(dependencies.slice(1)));
+    retval.sort();
+    return retval;
   }
 
   #walk(key: string): string[] {
