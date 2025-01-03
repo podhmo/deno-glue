@@ -1,4 +1,4 @@
-import { Context, Hono } from "jsr:@hono/hono@4.6.14";
+import { type Context, Hono } from "jsr:@hono/hono@4.6.14";
 
 import { transpile as tsxToJs } from "../../esm-sh.ts";
 import { HTML } from "../../mini-webapp.ts";

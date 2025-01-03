@@ -1,5 +1,5 @@
 /** @jsxImportSource jsr:@hono/hono@4.6.14/jsx */
-import { Context, Hono } from "jsr:@hono/hono@4.6.14";
+import { type Context, Hono } from "jsr:@hono/hono@4.6.14";
 import type { FC } from "jsr:@hono/hono@4.6.14/jsx";
 import { raw } from "jsr:@hono/hono@4.6.14/utils/html";
 import { transpile } from "../../esm-sh.ts";

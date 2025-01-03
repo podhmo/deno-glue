@@ -1,7 +1,10 @@
 // testdata/src/hello-component.tsx
-import { h } from "https://esm.sh/preact";
+import { jsxs } from "https://esm.sh/preact@10/jsx-runtime";
 function hello(name) {
-  return /* @__PURE__ */ h("p", null, "`Hello $", name, "`");
+  return /* @__PURE__ */ jsxs("p", { children: [
+    "Hello ",
+    name
+  ] });
 }
 export {
   hello
