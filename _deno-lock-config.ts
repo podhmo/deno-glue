@@ -67,8 +67,7 @@ export class DependenciesScanner {
     this.#specifiers = specifiers;
   }
 
-  // return dependencies
-  scan(
+  scanDependencies(
     pkg: string, // the key of #specifiers (for example "npm:react-router@*", "jsr:@std/json@1", ...)
   ): string[] {
     const version = this.#specifiers[pkg];
