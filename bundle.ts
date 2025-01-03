@@ -1,15 +1,14 @@
 import { basename, dirname, join as pathjoin } from "@std/path";
-import { exists } from "@std/fs";
-
 import { buildUsage, moreStrict, parseArgs } from "@podhmo/with-help";
-
 import * as esbuild from "esbuild";
+
 import {
   BASE_URL as ESM_SH_BASE_URL,
   PathReplacePlugin,
   transpile,
 } from "./esm-sh.ts";
 import { HTML } from "./mini-webapp.ts";
+import { findClosestConfigFile } from "./_deno-lock-config.ts";
 
 const outputStyles = ["esm", "html"] as const;
 const defaultOutputStyle = "esm";
@@ -138,28 +137,6 @@ export async function main(
   }
 
   await esbuild.stop();
-}
-
-async function findClosestConfigFile(
-  startPath: string,
-  targetFiles: string[],
-): Promise<string | null> {
-  let currentPath = await Deno.realPath(startPath);
-
-  while (currentPath) {
-    for (const file of targetFiles) {
-      const filePath = pathjoin(currentPath, file);
-      if (await exists(filePath)) {
-        return filePath;
-      }
-    }
-
-    const parentPath = dirname(currentPath);
-    if (parentPath === currentPath) break;
-    currentPath = parentPath;
-  }
-
-  return null;
 }
 
 if (import.meta.main) {
