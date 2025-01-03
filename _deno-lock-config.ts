@@ -82,7 +82,7 @@ export class DependenciesScanner {
       key = key.substring(4); // trim npm: for depenencies layout
     }
 
-    const walked = this.#walk(key);
+    const walked = this.#walk(key, [key]);
 
     // the first element is itself, so remove it.
     let deps = walked.slice(1);
@@ -94,7 +94,7 @@ export class DependenciesScanner {
     return deps;
   }
 
-  #walk(key: string): string[] {
+  #walk(key: string, history: string[]): string[] {
     const cached = this.#cache[key];
     if (cached !== undefined) {
       return cached;
@@ -103,7 +103,9 @@ export class DependenciesScanner {
     const { esmpkg, dependencies } = this.#mem[key];
     const value: string[] = [esmpkg];
     for (const dep of dependencies) {
-      const subvalue = this.#walk(dep);
+      history.push(dep);
+      const subvalue = this.#walk(dep, history);
+      history.pop();
       if (subvalue.length > 0) {
         value.push(...subvalue);
       }
