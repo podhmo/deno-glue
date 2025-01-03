@@ -35,6 +35,6 @@
     "@std/jsonc": "jsr:@std/jsonc@^1.0.1",
     "@std/path": "jsr:@std/path@^1.0.8",
     "@hono/hono": "jsr:@hono/hono@^4.6",
-    "esbuild": "npm:esbuild-wasm@0.24.2"
+    "esbuild": "npm:esbuild@0.24.2"
   }
 }
