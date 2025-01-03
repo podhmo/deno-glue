@@ -12,6 +12,7 @@ Deno.test("loadConfig", async () => {
       pkg: "@types/react@18.3.18",
       suffix: "?deps=@types/prop-types@15.7.14,csstype@3.1.3",
     },
+    "npm:preact@10": { pkg: "preact@10.5.13", suffix: "" },
     "npm:preact@10.5.13": { pkg: "preact@10.5.13", suffix: "" },
     "npm:react-dom@18": {
       pkg: "react-dom@18.3.1",
@@ -23,7 +24,7 @@ Deno.test("loadConfig", async () => {
       suffix: "?deps=js-tokens@4.0.0,loose-envify@1.4.0",
     },
     "preact": { pkg: "preact@10.5.13", suffix: "" },
-    "@hono/hono": { pkg: "jsr/@hono/hono@4.6.15", suffix: "" },
+    "jsr:@hono/hono@^4.6.0": { pkg: "jsr/@hono/hono@4.6.15", suffix: "" },
   };
 
   const got = config.specifiers;
@@ -41,6 +42,7 @@ Deno.test("loadConfig with development", async () => {
       pkg: "@types/react@18.3.18",
       suffix: "?dev&deps=@types/prop-types@15.7.14,csstype@3.1.3",
     },
+    "npm:preact@10": { pkg: "preact@10.5.13", suffix: "?dev" },
     "npm:preact@10.5.13": { pkg: "preact@10.5.13", suffix: "?dev" },
     "npm:react-dom@18": {
       pkg: "react-dom@18.3.1",
@@ -52,7 +54,7 @@ Deno.test("loadConfig with development", async () => {
       suffix: "?dev&deps=js-tokens@4.0.0,loose-envify@1.4.0",
     },
     "preact": { pkg: "preact@10.5.13", suffix: "?dev" },
-    "@hono/hono": { pkg: "jsr/@hono/hono@4.6.15", suffix: "?dev" },
+    "jsr:@hono/hono@^4.6.0": { pkg: "jsr/@hono/hono@4.6.15", suffix: "?dev" },
   };
 
   const got = config.specifiers;
