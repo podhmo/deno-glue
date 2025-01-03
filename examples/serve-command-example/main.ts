@@ -1,3 +1,5 @@
+import { join as pathjoin } from "jsr:@std/path@1.0.8/join";
+
 import { type Context, Hono } from "jsr:@hono/hono@4.6.15";
 import { HTML, tsxToJs } from "jsr:@podhmo/glue@0.2.1/mini-webapp";
 
@@ -9,7 +11,8 @@ import { HTML, tsxToJs } from "jsr:@podhmo/glue@0.2.1/mini-webapp";
 
 const app = new Hono();
 app.get("/", async (ctx: Context) => {
-  const code = await tsxToJs("./client.tsx");
+  const filepath = pathjoin(import.meta.dirname ?? "", "./client.tsx");
+  const code = await tsxToJs(filepath);
   const html = HTML({ code, id: "app", title: "Counter" });
   return ctx.html(html);
 });
