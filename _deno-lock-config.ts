@@ -58,9 +58,12 @@ export class DependenciesScanner {
         const parts = path.split("_")[0].split("@");
         const pkg = parts.slice(0, parts.length - 1).join("@");
         const version = parts[parts.length - 1];
+
         const value = {
           esmpkg: `jsr/${pkg}@${version}`,
-          dependencies: dependencies ?? [],
+          dependencies: (dependencies ?? []).map((d) =>
+            d.startsWith("npm:") ? d.substring(4) : d // trim npm: for depenencies layout
+          ),
         };
 
         mem["jsr:" + path] = value; // {jsr:<jsr-package>@<version>: {dependencies: [...]}}
@@ -138,6 +141,7 @@ export class DependenciesScanner {
   }
 
   #walk(key: string, history: string[]): string[] {
+    // console.error(`\t walk: ${key}, history: ${history.join(" -> ")}`);
     const cached = this.#cache[key];
     if (cached !== undefined) {
       return cached;
