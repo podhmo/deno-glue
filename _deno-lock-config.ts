@@ -58,13 +58,18 @@ export class DependenciesScanner {
     }
 
     // semver alias
-    for (const alias of Object.keys(lockConfig.specifiers)) {
+    for (const [alias, version] of Object.entries(lockConfig.specifiers)) {
       const parts = alias.split("@");
       let pkg = parts.slice(0, parts.length - 1).join("@");
       if (pkg.startsWith("npm:")) {
         pkg = pkg.substring(4); // trim npm: for depenencies layout
       }
-      mem[alias] = mem[pkg];
+
+      mem[alias] = mem[pkg + "@" + version];
+
+      if (alias.endsWith("@*")) {
+        mem[pkg] = mem[pkg + "@" + version]; // if no version, use specified version (overwrite jsr and npm phase)
+      }
     }
     return new DependenciesScanner(mem, lockConfig.specifiers);
   }
