@@ -202,7 +202,7 @@ import type { LockConfig } from "./_deno-lock-config.ts";
     const { msg, pkg, want } of cases
   ) {
     Deno.test(msgPrefix + msg, () => {
-      const got = s.scan(pkg);
+      const got = s.scanDependencies(pkg);
       assertEquals(got, want);
     });
   }
