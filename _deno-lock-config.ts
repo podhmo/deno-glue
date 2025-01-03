@@ -7,7 +7,7 @@ export interface LockConfig {
 }
 
 export class DependenciesScanner {
-  deps: Record<string, string[]> = {};
+  #cache: Record<string, string[]> = {};
 
   // layout:
   // {jsr:<jsr-package>@<version>: {dependencies: [...]}} +
@@ -95,7 +95,7 @@ export class DependenciesScanner {
   }
 
   #walk(key: string): string[] {
-    const cached = this.deps[key];
+    const cached = this.#cache[key];
     if (cached !== undefined) {
       return cached;
     }
@@ -109,7 +109,7 @@ export class DependenciesScanner {
       }
     }
 
-    this.deps[key] = value;
+    this.#cache[key] = value;
     return value; // duplicated elements are included
   }
 }
