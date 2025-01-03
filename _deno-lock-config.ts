@@ -1,5 +1,7 @@
 // deno.lock
 export interface LockConfig {
+  version?: "4"; // we only support version 4
+
   specifiers: Record<string, string>;
   jsr?: Record<string, { integrity: string; dependencies?: string[] }>;
   npm?: Record<string, { integrity: string; dependencies?: string[] }>;
