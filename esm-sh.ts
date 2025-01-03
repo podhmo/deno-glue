@@ -177,7 +177,7 @@ export async function loadConfig(
         }
       }
     } catch (e) {
-      debug(`[WARN] no deno.lock found: ${e}`);
+      console.error(`[WARN] no deno.lock found: ${e}`);
     }
   }
   return config;
