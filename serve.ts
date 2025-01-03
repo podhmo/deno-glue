@@ -1,11 +1,12 @@
+import { dirname } from "@std/path/dirname";
+
 import { moreStrict, parseArgs, printHelp } from "@podhmo/with-help";
 import * as cache from "./vendor/denosaurs/cache/mod.ts";
 import type { Context, Hono } from "@hono/hono";
+
 import { BASE_URL as ESM_SH_BASE_URL } from "./esm-sh.ts";
-import {
-  useCache as setupBaseUrlForTranspile,
-  useDevelopmentMode as setupDevelopmentModeForTranspile,
-} from "./mini-webapp.ts";
+import * as miniweb from "./mini-webapp.ts";
+import { findClosestConfigFile } from "./_deno-lock-config.ts";
 
 // interface Module {
 //   fetch: Deno.ServeHandler;
@@ -75,6 +76,7 @@ export function serve(
 
     cache: boolean;
     development: boolean;
+    denoConfigPath?: string;
   },
 ): Deno.HttpServer<Deno.NetAddr> {
   const hostname = options.hostname;
@@ -82,7 +84,7 @@ export function serve(
 
   // activate local cache
   if (options.cache) {
-    setupBaseUrlForTranspile("/"); // request via local endpoint
+    miniweb.useCache("/"); // request via local endpoint
     setupCachedProxyEndpoint(app, {
       hostname,
       port,
@@ -90,7 +92,10 @@ export function serve(
   }
 
   if (options.development) {
-    setupDevelopmentModeForTranspile();
+    miniweb.useDevelopmentMode();
+  }
+  if (options.denoConfigPath !== undefined) {
+    miniweb.useDenoConfig(options.denoConfigPath);
   }
 
   return Deno.serve({
@@ -116,7 +121,7 @@ export async function main(
     name: name,
     usageText: `Usage: ${name} [options] <specifier>`,
 
-    string: ["port", "host"],
+    string: ["port", "host", "deno-config"],
     required: ["port", "host"],
     boolean: ["clear-cache", "cache", "development", "debug"],
     negatable: ["cache"],
@@ -127,6 +132,7 @@ export async function main(
     },
     flagDescription: {
       "development": "development mode for esm.sh",
+      "deno-config": "deno.json or deno.jsonc",
     },
   });
 
@@ -142,13 +148,30 @@ export async function main(
     Deno.exit(1);
   }
 
+  let denoConfigPath = options["deno-config"];
+
+  let specifier: string = options._[0];
+  if (!specifier.includes("://")) {
+    if (denoConfigPath === undefined) {
+      const guessedPath = await findClosestConfigFile(dirname(specifier), [
+        "deno.json",
+        "deno.jsonc",
+      ]);
+      if (guessedPath !== null) {
+        if (options.debug) {
+          console.error(`[DEBUG] guessed deno.json is ${guessedPath}`);
+        }
+        denoConfigPath = guessedPath;
+      }
+    }
+
+    // to uri
+    specifier = `file://${Deno.realPathSync(specifier)}`; // to absolute path for restricted dynamic import in deno.
+  }
+
   // TODO: support tsx
   // TODO: type safe
   // https://docs.deno.com/deploy/api/dynamic-import/
-  let specifier: string = options._[0];
-  if (!specifier.includes("://")) {
-    specifier = `file://${Deno.realPathSync(specifier)}`; // to absolute path for restricted dynamic import in deno.
-  }
   const m = await import(specifier);
 
   if (m.default === undefined) {
@@ -167,6 +190,7 @@ export async function main(
     port: options.port,
     cache: options.cache,
     development: options.development,
+    denoConfigPath: denoConfigPath,
   });
   server.finished.then(() => {
     console.error("server finished");
