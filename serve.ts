@@ -75,6 +75,7 @@ export function serve(
     signal?: AbortSignal;
 
     cache: boolean;
+    debug: boolean;
     development: boolean;
     denoConfigPath?: string;
   },
@@ -96,6 +97,9 @@ export function serve(
   }
   if (options.denoConfigPath !== undefined) {
     miniweb.useDenoConfig(options.denoConfigPath);
+  }
+  if (options.debug) {
+    miniweb.useDebug();
   }
 
   return Deno.serve({
@@ -188,6 +192,9 @@ export async function main(
   const server = serve(m.default, {
     hostname: options.host,
     port: options.port,
+
+    // transpile options ...
+    debug: options.debug,
     cache: options.cache,
     development: options.development,
     denoConfigPath: denoConfigPath,

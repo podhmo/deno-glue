@@ -9,7 +9,7 @@ export const DEFAULT_CSS: string =
 const options: transpileOptions & { useCache: boolean } = {
   baseUrl: ESM_SH_BASE_URL,
   useCache: false,
-  debug: true,
+  debug: false,
   developmentMode: false,
   denoConfigPath: undefined,
 };
@@ -25,6 +25,9 @@ export function useDevelopmentMode() {
 }
 export function useDenoConfig(path: string) {
   options.denoConfigPath = path;
+}
+export function useDebug() {
+  options.debug = true;
 }
 
 export function tsxToJs(
