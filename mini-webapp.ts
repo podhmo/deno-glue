@@ -1,30 +1,40 @@
 import { transpile } from "./esm-sh.ts";
 import { BASE_URL as ESM_SH_BASE_URL } from "./esm-sh.ts";
+import type { transpileOptions } from "./esm-sh.ts";
+
 // https://www.npmjs.com/package/@picocss/pico
 export const DEFAULT_CSS: string =
   `https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css`;
 
-const options = {
+const options: transpileOptions & { useCache: boolean } = {
   baseUrl: ESM_SH_BASE_URL,
   useCache: false,
   debug: true,
   developmentMode: false,
+  denoConfigPath: undefined,
 };
+
+// helper functions for modify options
 
 export function useCache(proxyUrl: string) {
   options.useCache = true;
   options.baseUrl = proxyUrl; // request via local endpoint
 }
-
 export function useDevelopmentMode() {
   options.developmentMode = true;
 }
+export function useDenoConfig(path: string) {
+  options.denoConfigPath = path;
+}
 
-export function tsxToJs(filename: string): Promise<string> {
+export function tsxToJs(
+  filename: string,
+): Promise<string> {
   return transpile(filename, {
     debug: options.debug,
     baseUrl: options.baseUrl,
     developmentMode: options.developmentMode,
+    denoConfigPath: options.denoConfigPath,
   });
 }
 

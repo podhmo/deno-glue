@@ -183,16 +183,18 @@ export async function loadConfig(
   return config;
 }
 
+export type transpileOptions = {
+  debug: boolean;
+  denoConfigPath?: string;
+  baseUrl?: string;
+  plugins?: esbuild.Plugin[];
+  developmentMode?: boolean;
+};
+
 /** Utility for transpiling .tsx code to .js (while forwarding external dependencies to esm.sh) */
 export async function transpile(
   filename: string,
-  options: {
-    debug: boolean;
-    denoConfigPath?: string;
-    baseUrl?: string;
-    plugins?: esbuild.Plugin[];
-    developmentMode?: boolean;
-  },
+  options: transpileOptions,
 ): Promise<string> {
   let baseUrl = BASE_URL;
   if (options.baseUrl !== undefined) {
