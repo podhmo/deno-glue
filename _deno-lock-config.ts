@@ -56,6 +56,16 @@ export class DependenciesScanner {
         mem[pkg] = value; // {<npm-package>: {dependencies: [...]}}
       }
     }
+
+    // semver alias
+    for (const alias of Object.keys(lockConfig.specifiers)) {
+      const parts = alias.split("@");
+      let pkg = parts.slice(0, parts.length - 1).join("@");
+      if (pkg.startsWith("npm:")) {
+        pkg = pkg.substring(4); // trim npm: for depenencies layout
+      }
+      mem[alias] = mem[pkg];
+    }
     return new DependenciesScanner(mem, lockConfig.specifiers);
   }
 

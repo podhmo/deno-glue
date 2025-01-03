@@ -13,6 +13,9 @@ import type { LockConfig } from "./_deno-lock-config.ts";
       "jsr:@std/json@1": "1.0.1",
       "jsr:@std/jsonc@^1.0.1": "1.0.1",
       "jsr:@std/jsonc@*": "1.0.1",
+      "jsr:@std/fs@^1.0.5": "1.0.8",
+      "jsr:@std/path@^1.0.6": "1.0.8",
+      "jsr:@std/path@^1.0.8": "1.0.8",
       // npm
       "npm:@types/react@18": "18.3.18",
       "npm:@types/react@19": "19.0.2",
@@ -34,6 +37,17 @@ import type { LockConfig } from "./_deno-lock-config.ts";
         "dependencies": [
           "jsr:@std/json",
         ],
+      },
+      "@std/fs@1.0.8": {
+        "integrity":
+          "161c721b6f9400b8100a851b6f4061431c538b204bb76c501d02c508995cffe0",
+        "dependencies": [
+          "jsr:@std/path@^1.0.8",
+        ],
+      },
+      "@std/path@1.0.8": {
+        "integrity":
+          "548fa456bb6a04d3c1a1e7477986b6cffbce95102d0bb447c67c4ee70e0364be",
       },
     },
     npm: {
@@ -161,6 +175,11 @@ import type { LockConfig } from "./_deno-lock-config.ts";
       msg: "jsr no-version",
       pkg: "jsr:@std/jsonc@*",
       want: ["jsr/@std/json@1.0.1"],
+    },
+    {
+      msg: "jsr semver",
+      pkg: "jsr:@std/fs@^1.0.5",
+      want: ["jsr/@std/path@1.0.8"],
     },
     {
       msg: "npm two",
