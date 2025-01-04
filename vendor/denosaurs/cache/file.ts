@@ -130,10 +130,13 @@ async function hash(url: URL): Promise<string> {
 async function path(url: URL, ns?: string): Promise<string> {
   let path = [directory()];
   if (ns) path.push(ns);
+
+  const hashString = await hash(url);
   path = path.concat([
     url.protocol.slice(0, -1),
     url.hostname,
-    await hash(url),
+    hashString.slice(0, 2), // for performance
+    hashString,
   ]);
   return resolve(`${join(...path)}${extname(url.pathname)}`);
 }
