@@ -125,8 +125,9 @@ async function hash(url: URL): Promise<string> {
   const formatted = `${url.pathname}${url.search ? "?" + url.search : ""}`;
   const encoder = new TextEncoder();
   const data = encoder.encode(formatted);
-  const hash = await crypto.subtle.digest("SHA-256", data);
-  return new TextDecoder().decode(hash);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join(""); // convert bytes to hex string
 }
 
 async function path(url: URL, ns?: string): Promise<string> {
@@ -137,7 +138,7 @@ async function path(url: URL, ns?: string): Promise<string> {
     url.hostname,
     await hash(url),
   ]);
-  return resolve(`${join(...path)}${extname(url.pathname)}`).replace("\0", "");
+  return resolve(`${join(...path)}${extname(url.pathname)}`);
 }
 
 async function metapath(url: URL, ns?: string) {
