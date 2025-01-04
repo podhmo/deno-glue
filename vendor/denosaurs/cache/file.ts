@@ -31,7 +31,6 @@ export enum Origin {
 
 interface IFile {
   url: URL;
-  hash: string;
   path: string;
   metapath: string;
   meta: Metadata;
@@ -58,7 +57,6 @@ export class FileWrapper {
   ): Promise<FileWrapper> {
     return new FileWrapper(
       url,
-      await hash(url),
       await path(url, ns),
       policy,
       ns,
@@ -68,7 +66,6 @@ export class FileWrapper {
 
   constructor(
     public url: URL,
-    public hash: string,
     public path: string,
     public policy: Policy | undefined,
     public ns: string | undefined,
