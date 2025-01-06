@@ -12,8 +12,9 @@
       "LICENSE",
       "deno.json",
       "*.ts",
-      "vendor/**/*.ts",
-      "examples/serve-command-example/**"
+      "src/**/*.ts",
+      "src/**/*.tsx",
+      "vendor/**/*.ts"
     ]
   },
   "tasks": {
