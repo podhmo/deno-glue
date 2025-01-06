@@ -6,9 +6,9 @@ import {
   BASE_URL as ESM_SH_BASE_URL,
   PathReplacePlugin,
   transpile,
-} from "./esm-sh.ts";
-import { HTML } from "./mini-webapp.ts";
-import { findClosestConfigFile } from "./_deno-lock-config.ts";
+} from "../esm-sh.ts";
+import { HTML } from "../mini-webapp.ts";
+import { findClosestConfigFile } from "../_deno-lock-config.ts";
 
 const outputStyles = ["esm", "html"] as const;
 const defaultOutputStyle = "esm";

@@ -32,17 +32,17 @@ export async function main() {
 
   switch (subCommand) {
     case "bundle": {
-      const { main } = await import("./src/bundle.ts");
+      const { main } = await import("./src/subcommands/bundle.ts");
       await main(restArgs, options);
       break;
     }
     case "serve": {
-      const { main } = await import("./src/serve.ts");
+      const { main } = await import("./src/subcommands/serve.ts");
       await main(restArgs, options);
       break;
     }
     case "init": {
-      const { main } = await import("./src/init.ts");
+      const { main } = await import("./src/subcommands/init.ts");
       await main(restArgs, options);
       break;
     }
