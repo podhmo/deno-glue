@@ -1,4 +1,4 @@
-import * as cache from "./vendor/denosaurs/cache/mod.ts";
+import * as cache from "../vendor/denosaurs/cache/mod.ts";
 import type { Context, Hono } from "@hono/hono";
 
 import { BASE_URL as ESM_SH_BASE_URL } from "./esm-sh.ts";
