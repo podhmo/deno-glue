@@ -4,6 +4,7 @@
   "license": "MIT",
   "exports": {
     ".": "./main.ts",
+    "./esm-sh": "./src/esm-sh.ts",
     "./mini-webapp": "./src/mini-webapp.ts"
   },
   "publish": {
