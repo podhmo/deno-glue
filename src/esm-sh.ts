@@ -21,7 +21,7 @@ export async function PathReplacePlugin(
     baseUrl: BASE_URL,
     developmentMode: false,
   },
-) {
+): Promise<esbuild.Plugin> {
   let baseUrl = options.baseUrl ?? BASE_URL;
   if (baseUrl.endsWith("/")) {
     baseUrl = baseUrl.slice(0, -1);
