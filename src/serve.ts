@@ -11,13 +11,62 @@ export type Module = Hono; // TODO: use standard interface
 
 const ns = "podhmo-glue"; // namespace for cache
 
+export function serve(
+  app: Module,
+  options: Deno.ServeOptions<Deno.NetAddr> & {
+    port: number;
+    hostname: string;
+    signal?: AbortSignal;
+
+    cache: boolean;
+    debug: boolean;
+    development: boolean;
+    denoConfigPath?: string;
+  },
+): Deno.HttpServer<Deno.NetAddr> {
+  const hostname = options.hostname;
+  const port = options.port;
+
+  // activate local cache
+  if (options.cache) {
+    miniweb.useCache("/"); // request via local endpoint
+    setupEsmShProxyEndpoint(app, {
+      hostname,
+      port,
+    });
+  }
+
+  if (options.development) {
+    miniweb.useDevelopmentMode();
+  }
+  if (options.denoConfigPath !== undefined) {
+    miniweb.useDenoConfig(options.denoConfigPath);
+  }
+  if (options.debug) {
+    miniweb.useDebug();
+  }
+
+  return Deno.serve({
+    port,
+    hostname,
+    handler: app.fetch,
+    signal: options.signal,
+    onListen: options.onListen,
+  });
+}
+
+export async function clearCache(): Promise<boolean> {
+  console.error("clear cache: %s/%s", cache.directory(), ns);
+  return await cache.purge(ns);
+}
+
 // esm-shが自分自身のパスを返すのでとりあえずすべてをproxyする
 //
 // e.g.
 // /* esm.sh - react@18.3.1 */
 // export * from "/stable/react@18.3.1/es2022/react.mjs";
 // export { default } from "/stable/react@18.3.1/es2022/react.mjs";
-export function setupCachedProxyEndpoint(app: Module, options: {
+export function setupEsmShProxyEndpoint(app: Module, options: {
   hostname: string;
   port: number;
 }) {
@@ -61,53 +110,4 @@ export function setupCachedProxyEndpoint(app: Module, options: {
       status: data.meta.status ?? 200,
     });
   });
-}
-
-export function serve(
-  app: Module,
-  options: Deno.ServeOptions<Deno.NetAddr> & {
-    port: number;
-    hostname: string;
-    signal?: AbortSignal;
-
-    cache: boolean;
-    debug: boolean;
-    development: boolean;
-    denoConfigPath?: string;
-  },
-): Deno.HttpServer<Deno.NetAddr> {
-  const hostname = options.hostname;
-  const port = options.port;
-
-  // activate local cache
-  if (options.cache) {
-    miniweb.useCache("/"); // request via local endpoint
-    setupCachedProxyEndpoint(app, {
-      hostname,
-      port,
-    });
-  }
-
-  if (options.development) {
-    miniweb.useDevelopmentMode();
-  }
-  if (options.denoConfigPath !== undefined) {
-    miniweb.useDenoConfig(options.denoConfigPath);
-  }
-  if (options.debug) {
-    miniweb.useDebug();
-  }
-
-  return Deno.serve({
-    port,
-    hostname,
-    handler: app.fetch,
-    signal: options.signal,
-    onListen: options.onListen,
-  });
-}
-
-export async function clearCache(): Promise<boolean> {
-  console.error("clear cache: %s/%s", cache.directory(), ns);
-  return await cache.purge(ns);
 }
