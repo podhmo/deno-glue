@@ -8,7 +8,7 @@ import {
   transpile,
 } from "../esm-sh.ts";
 import { HTML } from "../mini-webapp.ts";
-import { findClosestConfigFile } from "../_deno-lock-config.ts";
+import { findClosestFile } from "../utils.ts";
 
 const outputStyles = ["esm", "html"] as const;
 const defaultOutputStyle = "esm";
@@ -60,7 +60,7 @@ export async function main(
   for (const inputFile of options._) {
     let denoConfigPath = options["deno-config"];
     if (denoConfigPath === undefined) {
-      const guessedPath = await findClosestConfigFile(dirname(inputFile), [
+      const guessedPath = await findClosestFile(dirname(inputFile), [
         "deno.json",
         "deno.jsonc",
       ]);

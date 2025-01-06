@@ -4,7 +4,7 @@ import { moreStrict, parseArgs, printHelp } from "@podhmo/with-help";
 
 import { clearCache, serve } from "../serve.ts";
 import type { Module } from "../serve.ts";
-import { findClosestConfigFile } from "../_deno-lock-config.ts";
+import { findClosestFile } from "../utils.ts";
 
 export async function main(
   args: string[] = Deno.args,
@@ -47,7 +47,7 @@ export async function main(
   let specifier: string = options._[0];
   if (!specifier.includes("://")) {
     if (denoConfigPath === undefined) {
-      const guessedPath = await findClosestConfigFile(dirname(specifier), [
+      const guessedPath = await findClosestFile(dirname(specifier), [
         "deno.json",
         "deno.jsonc",
       ]);
