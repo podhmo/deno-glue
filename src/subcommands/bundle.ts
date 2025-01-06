@@ -8,7 +8,7 @@ import {
   transpile,
 } from "../esm-sh.ts";
 import { HTML } from "../mini-webapp.ts";
-import { findClosestFile } from "../fileutils.ts";
+import { findClosestFile } from "../_fileutils.ts";
 
 const outputStyles = ["esm", "html"] as const;
 const defaultOutputStyle = "esm";
