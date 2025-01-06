@@ -2,7 +2,7 @@
 import { type Context, Hono } from "jsr:@hono/hono@4.6.14";
 import type { FC } from "jsr:@hono/hono@4.6.14/jsx";
 import { raw } from "jsr:@hono/hono@4.6.14/utils/html";
-import { transpile } from "../../esm-sh.ts";
+import { transpile } from "../../src/esm-sh.ts";
 
 // $ deno serve --port 8080 --allow-net --allow-read main.tsx
 const app = new Hono();
