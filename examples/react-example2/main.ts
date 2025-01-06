@@ -1,7 +1,7 @@
 import { type Context, Hono } from "jsr:@hono/hono@4.6.14";
 
-import { transpile as tsxToJs } from "../../esm-sh.ts";
-import { HTML } from "../../mini-webapp.ts";
+import { transpile as tsxToJs } from "../../src/esm-sh.ts";
+import { HTML } from "../../src/mini-webapp.ts";
 import { parseArgs } from "jsr:@podhmo/with-help@0.5.3";
 
 const options = parseArgs(Deno.args, {
