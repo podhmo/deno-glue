@@ -1,4 +1,4 @@
-default: 00 01 02
+default: 00 01 02 10
 .PHONY: default
 
 clean:
@@ -23,3 +23,8 @@ clean:
 	deno run -A main.ts bundle testdata/src/hello.ts testdata/src/hello-component.tsx --outdir testdata/dst
 .PHONY: 02
 
+# init example
+10:
+	mkdir -p examples/serve-example
+	(cd examples/serve-example && deno run -A ../../main.ts init)
+.PHONY: 10
