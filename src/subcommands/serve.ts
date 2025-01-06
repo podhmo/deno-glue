@@ -4,7 +4,7 @@ import { moreStrict, parseArgs, printHelp } from "@podhmo/with-help";
 
 import { clearCache, serve } from "../serve.ts";
 import type { Module } from "../serve.ts";
-import { findClosestFile } from "../utils.ts";
+import { findClosestFile } from "../fileutils.ts";
 
 export async function main(
   args: string[] = Deno.args,
