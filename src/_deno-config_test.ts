@@ -1,9 +1,13 @@
-import { loadConfig } from "./esm-sh.ts";
 import { assertEquals } from "jsr:@std/assert";
+
+import { loadConfig } from "./_deno-config.ts";
+import { join as pathjoin } from "jsr:@std/path/join";
+
+const DIR = import.meta.dirname ?? "";
 
 Deno.test("loadConfig", async () => {
   const config = await loadConfig(
-    "testdata/deno.json",
+    pathjoin(DIR, "../testdata/deno.json"),
     { debug: (_: string) => {}, developmentMode: false },
   );
 
@@ -33,7 +37,7 @@ Deno.test("loadConfig", async () => {
 
 Deno.test("loadConfig with development", async () => {
   const config = await loadConfig(
-    "testdata/deno.json",
+    pathjoin(DIR, "../testdata/deno.json"),
     { debug: (_: string) => {}, developmentMode: true },
   );
 
