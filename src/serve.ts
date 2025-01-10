@@ -22,18 +22,16 @@ export function serve(
     debug: boolean;
     development: boolean;
     denoConfigPath?: string;
+    baseUrl?: string;
   },
 ): Deno.HttpServer<Deno.NetAddr> {
   const hostname = options.hostname;
   const port = options.port;
-
+  const baseUrl = options.baseUrl ?? ESM_SH_BASE_URL;
   // activate local cache
   if (options.cache) {
     miniweb.useCache("/"); // request via local endpoint
-    setupEsmShProxyEndpoint(app, {
-      hostname,
-      port,
-    });
+    setupEsmShProxyEndpoint(app, { hostname, port, baseUrl });
   }
 
   if (options.development) {
@@ -69,7 +67,10 @@ export async function clearCache(): Promise<boolean> {
 export function setupEsmShProxyEndpoint(app: Module, options: {
   hostname: string;
   port: number;
+  baseUrl: string;
 }) {
+  const baseUrl = options.baseUrl;
+
   app.get("/*", async (ctx: Context): Promise<Response> => {
     if (!ctx.req.url.startsWith("http")) {
       return new Response("invalid url", { status: 404 });
@@ -79,7 +80,7 @@ export function setupEsmShProxyEndpoint(app: Module, options: {
     }
 
     const req = ctx.req;
-    let url = new URL(req.path, ESM_SH_BASE_URL).toString();
+    let url = new URL(req.path, baseUrl).toString();
     const query = req.query();
     if (Object.keys(query).length > 0) {
       url += `?${new URLSearchParams(query).toString()}`; // todo: sorted query string is needed (for cache)
@@ -94,7 +95,7 @@ export function setupEsmShProxyEndpoint(app: Module, options: {
       const headers = data.meta.headers ?? {};
       let location = headers["Location"] || headers["location"];
       if (location) {
-        location = location.replace(ESM_SH_BASE_URL, "");
+        location = location.replace(baseUrl, "");
         console.error("%credirect: %s", "color:gray", location);
         return ctx.redirect(location, status);
       }

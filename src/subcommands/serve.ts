@@ -3,6 +3,10 @@ import { dirname } from "@std/path/dirname";
 import { moreStrict, parseArgs, printHelp } from "@podhmo/with-help";
 
 import { clearCache, serve } from "../serve.ts";
+import {
+  BASE_URL as ESM_SH_BASE_URL,
+  NEXT_BASE_URL as ESM_SH_NEXT_BASE_URL,
+} from "../esm-sh.ts";
 import type { Module } from "../serve.ts";
 import { findClosestFile } from "../_fileutils.ts";
 
@@ -15,18 +19,20 @@ export async function main(
     name: name,
     usageText: `Usage: ${name} [options] <specifier>`,
 
-    string: ["port", "host", "deno-config"],
+    string: ["port", "host", "deno-config", "esm-sh-base-url"],
     required: ["port", "host"],
-    boolean: ["clear-cache", "cache", "development", "debug"],
+    boolean: ["clear-cache", "cache", "development", "debug", "next"],
     negatable: ["cache"],
     default: {
       host: "127.0.0.1",
       port: "8080",
       debug: baseOptions.debug,
+      "esm-sh-base-url": ESM_SH_BASE_URL,
     },
     flagDescription: {
-      "development": "development mode for esm.sh",
       "deno-config": "deno.json or deno.jsonc",
+      "development": "development mode for esm.sh",
+      "next": "set https://next.esm.sh as base url",
     },
   });
 
@@ -34,6 +40,9 @@ export async function main(
   const options = {
     ...options_,
     port: restrict.integer(options_.port),
+    "esm-sh-base-url": options_.next
+      ? ESM_SH_NEXT_BASE_URL
+      : options_["esm-sh-base-url"],
   };
 
   if (options_._.length < 1) {
@@ -90,6 +99,7 @@ export async function main(
     cache: options.cache,
     development: options.development,
     denoConfigPath: denoConfigPath,
+    baseUrl: options["esm-sh-base-url"],
   });
   server.finished.then(() => {
     console.error("server finished");
