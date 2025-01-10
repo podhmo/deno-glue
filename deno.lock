@@ -1,8 +1,7 @@
 {
   "version": "4",
   "specifiers": {
-    "jsr:@hono/hono@4.6.15": "4.6.15",
-    "jsr:@hono/hono@^4.6.0": "4.6.15",
+    "jsr:@hono/hono@^4.6.16": "4.6.16",
     "jsr:@podhmo/with-help@0.5": "0.5.3",
     "jsr:@std/assert@*": "1.0.10",
     "jsr:@std/assert@1.0.6": "1.0.6",
@@ -11,7 +10,7 @@
     "jsr:@std/collections@1.0.9": "1.0.9",
     "jsr:@std/collections@^1.0.9": "1.0.9",
     "jsr:@std/fs@1.0.4": "1.0.4",
-    "jsr:@std/fs@^1.0.5": "1.0.8",
+    "jsr:@std/fs@^1.0.9": "1.0.9",
     "jsr:@std/internal@^1.0.4": "1.0.5",
     "jsr:@std/internal@^1.0.5": "1.0.5",
     "jsr:@std/json@1": "1.0.1",
@@ -25,8 +24,8 @@
     "npm:preact@10": "10.25.4"
   },
   "jsr": {
-    "@hono/hono@4.6.15": {
-      "integrity": "935b3b12e98e4b22bcd1aa4dbe6587321e431c79829eba61f535b4ede39fd8b1"
+    "@hono/hono@4.6.16": {
+      "integrity": "b540c6b1352d73142895f7bb6bfd0b6cc514ede61c12940338c4ae5dd06cb326"
     },
     "@podhmo/with-help@0.5.3": {
       "integrity": "19bec7430a2bd874cf2141e7c626f8f46ff1bcf7cbe09a0d3c1eef07522592d0",
@@ -58,8 +57,8 @@
         "jsr:@std/path@^1.0.6"
       ]
     },
-    "@std/fs@1.0.8": {
-      "integrity": "161c721b6f9400b8100a851b6f4061431c538b204bb76c501d02c508995cffe0",
+    "@std/fs@1.0.9": {
+      "integrity": "3eef7e3ed3d317b29432c7dcb3b20122820dbc574263f721cb0248ad91bad890",
       "dependencies": [
         "jsr:@std/path@^1.0.8"
       ]
@@ -195,11 +194,11 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@hono/hono@^4.6.0",
+      "jsr:@hono/hono@^4.6.16",
       "jsr:@podhmo/with-help@0.5",
       "jsr:@std/assert@^1.0.10",
       "jsr:@std/collections@^1.0.9",
-      "jsr:@std/fs@^1.0.5",
+      "jsr:@std/fs@^1.0.9",
       "jsr:@std/jsonc@^1.0.1",
       "jsr:@std/path@^1.0.8",
       "npm:esbuild@0.24.2"

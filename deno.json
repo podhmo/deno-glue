@@ -33,10 +33,10 @@
     "@podhmo/with-help": "jsr:@podhmo/with-help@^0.5.0",
     "@std/assert": "jsr:@std/assert@^1.0.10",
     "@std/collections": "jsr:@std/collections@^1.0.9",
-    "@std/fs": "jsr:@std/fs@^1.0.5",
+    "@std/fs": "jsr:@std/fs@^1.0.9",
     "@std/jsonc": "jsr:@std/jsonc@^1.0.1",
     "@std/path": "jsr:@std/path@^1.0.8",
-    "@hono/hono": "jsr:@hono/hono@^4.6",
+    "@hono/hono": "jsr:@hono/hono@^4.6.16",
     "esbuild": "npm:esbuild@0.24.2"
   }
 }
