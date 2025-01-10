@@ -23,7 +23,10 @@ export class DependenciesScanner {
   // "jsr:@std/json@1": "1.0.1"
   #specifiers: Record<string, string> = {};
 
-  static fromLockConfig(lockConfig: LockConfig) {
+  static fromLockConfig(
+    lockConfig: LockConfig,
+    options: { ignoreTypesPackages: boolean },
+  ): DependenciesScanner {
     const mem: Record<string, { esmpkg: string; dependencies: string[] }> = {};
     const jsr = lockConfig.jsr;
     if (jsr !== undefined) {
@@ -76,12 +79,13 @@ export class DependenciesScanner {
         mem[pkg] = mem[pkg + "@" + version]; // if no version, use specified version (overwrite jsr and npm phase)
       }
     }
-    return new DependenciesScanner(mem, lockConfig.specifiers);
+    return new DependenciesScanner(mem, lockConfig.specifiers, options);
   }
 
   constructor(
     mem: Record<string, { esmpkg: string; dependencies: string[] }>,
     specifiers: Record<string, string>,
+    public options: { ignoreTypesPackages: boolean },
   ) {
     this.#mem = mem;
     this.#specifiers = specifiers;
@@ -124,6 +128,11 @@ export class DependenciesScanner {
     const { esmpkg, dependencies } = this.#mem[key];
     const value: string[] = [esmpkg];
     for (const dep of dependencies) {
+      // types are not dependencies in runtime
+      if (this.options.ignoreTypesPackages && dep.startsWith("@types/")) {
+        continue;
+      }
+
       history.push(dep);
       const subvalue = this.#walk(dep, history);
       history.pop();

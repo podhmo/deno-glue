@@ -51,7 +51,9 @@ export async function loadConfig(
       if (lockConfig.specifiers !== undefined) {
         // e.g. {"npm:react@18": version=18.3.1}
 
-        const depScanner = DependenciesScanner.fromLockConfig(lockConfig);
+        const depScanner = DependenciesScanner.fromLockConfig(lockConfig, {
+          ignoreTypesPackages: OPTIMIZE,
+        });
         for (
           const [alias, specifier] of Object.entries(
             lockConfig.specifiers,
@@ -60,10 +62,7 @@ export async function loadConfig(
           let suffix: string[] = globalSuffix;
           const version = specifier.split("_")[0]; // TODO: handling deps
 
-          let deps = depScanner.scanDependencies(alias);
-          if (OPTIMIZE) {
-            deps = deps.filter((d) => !d.startsWith("@types/")); // types are not dependencies in runtime
-          }
+          const deps = depScanner.scanDependencies(alias);
           if (deps.length > 0) {
             suffix = suffix.concat(`deps=${deps.join(",")}`);
           }

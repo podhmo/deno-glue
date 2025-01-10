@@ -159,7 +159,9 @@ import type { LockConfig } from "./_deno-lock-config.ts";
     },
   };
 
-  const s = DependenciesScanner.fromLockConfig(config);
+  const s = DependenciesScanner.fromLockConfig(config, {
+    ignoreTypesPackages: false,
+  });
   const cases: { msg: string; pkg: string; want: string[] }[] = [
     {
       msg: "jsr empty",
