@@ -1,7 +1,7 @@
 import { moreStrict, parseArgs, printHelp } from "@podhmo/with-help";
 import denoJSON from "./deno.json" with { type: "json" };
 
-const commands = ["bundle", "serve", "init", "version"] as const;
+const commands = ["bundle", "serve", "init"] as const;
 
 export async function main() {
   const options = parseArgs(Deno.args, {
@@ -14,11 +14,13 @@ export async function main() {
     stopEarly: true, // for subcommand
     footer: [
       "",
+      "Version:",
+      `  ${denoJSON.version}`,
+      "",
       "Commands:",
       "  bundle <filename>  bundle file",
       "  serve              serve file",
       "  init               init project",
-      "  version            show version",
     ].join("\n"),
   });
   if (options._.length === 0) {
@@ -46,10 +48,6 @@ export async function main() {
     case "init": {
       const { main } = await import("./src/subcommands/init.ts");
       await main(restArgs, options);
-      break;
-    }
-    case "version": {
-      console.log(denoJSON.version);
       break;
     }
     default: {
