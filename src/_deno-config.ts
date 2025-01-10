@@ -56,7 +56,9 @@ export async function loadConfig(
           let suffix: string[] = globalSuffix;
           const version = specifier.split("_")[0]; // TODO: handling deps
 
-          const deps = depScanner.scanDependencies(alias);
+          const deps = depScanner.scanDependencies(alias).filter((d) =>
+            !d.startsWith("@types/") // types are not dependencies in runtime
+          );
           if (deps.length > 0) {
             suffix = suffix.concat(`deps=${deps.join(",")}`);
           }
