@@ -7,7 +7,7 @@ import { HTML, tsxToJs } from "jsr:@podhmo/glue@0.2.3/mini-webapp";
 // $ deno run -A jsr:@podhmo/glue@0.2.2 serve --port 8080 ./app.ts
 //
 // bunle to single html file
-// $ deno run -A jsr:@podhmo/glue@0.2.2 bundle --output-style html --html-id app ./client.tsx > index.html
+// $ deno run -A jsr:@podhmo/glue@0.2.2 bundle --output-style html --html-id root ./client.tsx > index.html
 //
 
 const app = new Hono();
@@ -17,7 +17,7 @@ app.get("/", async (ctx: Context) => {
   const title = Deno.env.get("TITLE") || "Counter";
 
   const code = await tsxToJs(filepath);
-  const html = HTML({ code, id: "app", title });
+  const html = HTML({ code, id: "root", title });
   return ctx.html(html);
 });
 export default app;
