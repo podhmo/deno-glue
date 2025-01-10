@@ -14,7 +14,7 @@ Deno.test("loadConfig", async () => {
   const want = {
     "npm:@types/react@18": {
       pkg: "@types/react@18.3.18",
-      suffix: "?deps=@types/prop-types@15.7.14,csstype@3.1.3",
+      suffix: "?deps=csstype@3.1.3",
     },
     "npm:preact@10": { pkg: "preact@10.5.13", suffix: "" },
     "npm:preact@10.5.13": { pkg: "preact@10.5.13", suffix: "" },
@@ -44,7 +44,7 @@ Deno.test("loadConfig with development", async () => {
   const want = {
     "npm:@types/react@18": {
       pkg: "@types/react@18.3.18",
-      suffix: "?dev&deps=@types/prop-types@15.7.14,csstype@3.1.3",
+      suffix: "?dev&deps=csstype@3.1.3",
     },
     "npm:preact@10": { pkg: "preact@10.5.13", suffix: "?dev" },
     "npm:preact@10.5.13": { pkg: "preact@10.5.13", suffix: "?dev" },
