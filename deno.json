@@ -21,7 +21,9 @@
   },
   "tasks": {
     "check": "deno check src/**/*.ts testdata/**/*.ts testdata/**/*.tsx",
-    "ok": "deno lint && deno task check && deno test --allow-read --allow-write --allow-net",
+    "test": "deno test --allow-read --allow-write --allow-net ./src/",
+    "test-full": "deno test --allow-read --allow-write --allow-net",
+    "ok": "deno lint && deno task check && deno task test-full",
     "dev-install": "mkdir -p bin && deno install -A --config deno.json ./main.ts --global --name glue -f --root ."
   },
   "fmt": {
