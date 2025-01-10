@@ -23,6 +23,9 @@ export class DependenciesScanner {
   // "jsr:@std/json@1": "1.0.1"
   #specifiers: Record<string, string> = {};
 
+  // options
+  ignoreTypesPackages: boolean;
+
   static fromLockConfig(
     lockConfig: LockConfig,
     options: { ignoreTypesPackages: boolean },
@@ -85,10 +88,11 @@ export class DependenciesScanner {
   constructor(
     mem: Record<string, { esmpkg: string; dependencies: string[] }>,
     specifiers: Record<string, string>,
-    public options: { ignoreTypesPackages: boolean },
+    options: { ignoreTypesPackages: boolean },
   ) {
     this.#mem = mem;
     this.#specifiers = specifiers;
+    this.ignoreTypesPackages = options.ignoreTypesPackages;
   }
 
   scanDependencies(
@@ -129,7 +133,7 @@ export class DependenciesScanner {
     const value: string[] = [esmpkg];
     for (const dep of dependencies) {
       // types are not dependencies in runtime
-      if (this.options.ignoreTypesPackages && dep.startsWith("@types/")) {
+      if (this.ignoreTypesPackages && dep.startsWith("@types/")) {
         continue;
       }
 
