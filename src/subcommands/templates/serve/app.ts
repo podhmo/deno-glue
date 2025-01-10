@@ -8,12 +8,16 @@ import { HTML, tsxToJs } from "jsr:@podhmo/glue@0.2.3/mini-webapp";
 //
 // bunle to single html file
 // $ deno run -A jsr:@podhmo/glue@0.2.2 bundle --output-style html --html-id app ./client.tsx > index.html
+//
 
 const app = new Hono();
 app.get("/", async (ctx: Context) => {
-  const filepath = pathjoin(import.meta.dirname ?? "", "./client.tsx");
+  const filename = Deno.env.get("TSX") || "client.tsx";
+  const filepath = pathjoin(import.meta.dirname ?? "", filename);
+  const title = Deno.env.get("TITLE") || "Counter";
+
   const code = await tsxToJs(filepath);
-  const html = HTML({ code, id: "app", title: "Counter" });
+  const html = HTML({ code, id: "app", title });
   return ctx.html(html);
 });
 export default app;
