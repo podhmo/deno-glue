@@ -1,13 +1,13 @@
 import { join as pathjoin } from "jsr:@std/path@1.0.8/join";
 
 import { type Context, Hono } from "jsr:@hono/hono@4.6.15";
-import { HTML, tsxToJs } from "jsr:@podhmo/glue/mini-webapp";
+import { HTML, tsxToJs } from "jsr:@podhmo/glue@0.2.3/mini-webapp";
 
 // serve for development
-// $ deno run -A jsr:@podhmo/glue serve --port 8080 ./app.ts
+// $ deno run -A jsr:@podhmo/glue@0.2.3 serve --port 8080 ./app.ts
 //
 // bunle to single html file
-// $ deno run -A jsr:@podhmo/glue bundle --output-style html --html-id root ./client.tsx > index.html
+// $ deno run -A jsr:@podhmo/glue@0.2.3 bundle --output-style html --html-id root ./client.tsx > index.html
 //
 
 const app = new Hono();
