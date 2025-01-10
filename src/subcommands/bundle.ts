@@ -4,6 +4,7 @@ import * as esbuild from "esbuild";
 
 import {
   BASE_URL as ESM_SH_BASE_URL,
+  NEXT_BASE_URL as ESM_SH_NEXT_BASE_URL,
   PathReplacePlugin,
   transpile,
 } from "../esm-sh.ts";
@@ -29,7 +30,7 @@ export async function main(
       "output-style",
       "html-id",
     ],
-    boolean: ["debug", "development"],
+    boolean: ["debug", "development", "next"],
     required: ["esm-sh-base-url", "output-style", "html-id"],
     default: {
       "esm-sh-base-url": ESM_SH_BASE_URL,
@@ -45,6 +46,7 @@ export async function main(
         JSON.stringify(outputStyles)
       } (default: ${defaultOutputStyle})`,
       "development": "development mode for esm.sh",
+      "next": "set https://next.esm.sh as base url",
     },
   });
 
@@ -52,6 +54,9 @@ export async function main(
   const options = {
     ...options_,
     "output-style": choices(options_["output-style"], outputStyles),
+    "esm-sh-base-url": options_.next
+      ? ESM_SH_NEXT_BASE_URL
+      : options_["esm-sh-base-url"],
   };
 
   const pluginsCache = new Map<string | undefined, esbuild.Plugin[]>();

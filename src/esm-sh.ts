@@ -3,8 +3,8 @@ import { sortBy } from "@std/collections/sort-by";
 
 import { loadConfig } from "./_deno-config.ts";
 
-export const BASE_URL = "https://esm.sh";
-
+export const BASE_URL = "https://esm.sh"; // stable version url
+export const NEXT_BASE_URL = "https://next.esm.sh"; // unstable next version url
 /**
  esbuild plugin for rewriting deno's original import path to esm.sh URL
 */
