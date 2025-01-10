@@ -1,6 +1,7 @@
 import * as Cache from "./mod.ts";
 import { assert, assertEquals } from "./test_deps.ts";
 import { resolve, toFileUrl } from "./deps.ts";
+import { join } from "./deps.ts";
 
 Deno.test({
   name: "cache | local | relative",
@@ -8,7 +9,7 @@ Deno.test({
     const url = "./README.md";
 
     Cache.configure({
-      directory: "cache",
+      directory: join(import.meta.dirname ?? "", "cache"),
     });
     const local = Cache.namespace("local");
     await local.purge();
@@ -32,7 +33,7 @@ Deno.test({
     const rel = `./README.md`;
 
     Cache.configure({
-      directory: "cache",
+      directory: join(import.meta.dirname ?? "", "cache"),
     });
     const local = Cache.namespace("local");
     await local.purge();
@@ -62,7 +63,7 @@ Deno.test({
     const url = toFileUrl(resolve("./README.md"));
 
     Cache.configure({
-      directory: "cache",
+      directory: join(import.meta.dirname ?? "", "cache"),
     });
     const local = Cache.namespace("local");
     await local.purge();
@@ -85,7 +86,7 @@ Deno.test({
     const url = new URL("README.md", import.meta.url);
 
     Cache.configure({
-      directory: "cache",
+      directory: join(import.meta.dirname ?? "", "cache"),
     });
     const local = Cache.namespace("local");
     await local.purge();
@@ -108,7 +109,7 @@ Deno.test({
     const url = "https://deno.land/std/version.ts";
 
     Cache.configure({
-      directory: "cache",
+      directory: join(import.meta.dirname ?? "", "cache"),
     });
     const remote = Cache.namespace("remote");
     await remote.purge();
