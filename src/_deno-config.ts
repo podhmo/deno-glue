@@ -9,6 +9,10 @@ interface Config {
   specifiers: Record<string, { pkg: string; suffix: string }>; // alias | path -> pkg + version + suffix
 }
 
+// if true, applying some optimizations.
+// - exclude @types/ dependencies
+export const OPTIMIZE = true;
+
 export async function loadConfig(
   denoConfigPath: string | undefined, // deno.json
   options: { debug: (_: string) => void; developmentMode: boolean },
@@ -56,9 +60,10 @@ export async function loadConfig(
           let suffix: string[] = globalSuffix;
           const version = specifier.split("_")[0]; // TODO: handling deps
 
-          const deps = depScanner.scanDependencies(alias).filter((d) =>
-            !d.startsWith("@types/") // types are not dependencies in runtime
-          );
+          let deps = depScanner.scanDependencies(alias);
+          if (OPTIMIZE) {
+            deps = deps.filter((d) => !d.startsWith("@types/")); // types are not dependencies in runtime
+          }
           if (deps.length > 0) {
             suffix = suffix.concat(`deps=${deps.join(",")}`);
           }
