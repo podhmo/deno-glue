@@ -5,10 +5,14 @@
 import { StrictMode, useState } from "npm:react@19";
 import { createRoot } from "npm:react-dom@19/client";
 
+// ----------------------------------------
+// components
+// ----------------------------------------
 function Counter() {
   const [count, setCount] = useState(0);
   const onIncrement = () => setCount((prev: number) => prev + 1);
   const onDecrement = () => setCount((prev: number) => prev - 1);
+
   return (
     <>
       <p>Count: {count}</p>
@@ -27,8 +31,10 @@ function App() {
   );
 }
 
+// ----------------------------------------
 // main
-const root = createRoot(document.getElementById("app"));
+// ----------------------------------------
+const root = createRoot(document.getElementById("root"));
 root.render(
   <StrictMode>
     <App />

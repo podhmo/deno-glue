@@ -24,17 +24,14 @@ export function tsxToJs(
 
 export function HTML(
   props: {
-    id: string;
-    code: string;
     title?: string;
     css?: string;
     lang?: string; // e.g. "en" | "ja"
   },
+  children: string[],
 ): string {
-  const id = props.id;
   const title = props.title ?? "--";
   const css = props.css ?? DEFAULT_CSS;
-  const code = props.code;
 
   const html = [
     "<!DOCTYPE html>",
@@ -49,14 +46,20 @@ export function HTML(
     css ? `<link rel="stylesheet" href="${css}" />` : null,
     "</head>",
     "<body>",
-    `<main id=${id} class="container">`,
-    "<h1>...</h1>",
-    "</main>",
-    `<script type="module">`,
-    code,
-    `</script>`,
+    ...children,
     "</body>",
     "</html>",
   ];
   return html.filter((v) => v !== null).join("\n");
+}
+
+export function CODE(props: { id: string; code: string }): string[] {
+  return [
+    `<main id=${props.id} class="container">`,
+    "<h1>...</h1>",
+    "</main>",
+    `<script type="module">`,
+    props.code,
+    `</script>`,
+  ];
 }

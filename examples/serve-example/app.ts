@@ -1,19 +1,23 @@
 import { join as pathjoin } from "jsr:@std/path@1.0.8/join";
 
 import { type Context, Hono } from "jsr:@hono/hono@4.6.15";
-import { HTML, tsxToJs } from "jsr:@podhmo/glue@0.2.3/mini-webapp";
+import { CODE, HTML, tsxToJs } from "jsr:@podhmo/glue@0.2.3/mini-webapp";
 
 // serve for development
 // $ deno run -A jsr:@podhmo/glue@0.2.3 serve --port 8080 ./app.ts
 //
 // bunle to single html file
-// $ deno run -A jsr:@podhmo/glue@0.2.3 bundle --output-style html --html-id app ./client.tsx > index.html
+// $ deno run -A jsr:@podhmo/glue@0.2.3 bundle --output-style html --html-id root ./client.tsx > index.html
+//
 
 const app = new Hono();
 app.get("/", async (ctx: Context) => {
-  const filepath = pathjoin(import.meta.dirname ?? "", "./client.tsx");
+  const filename = Deno.env.get("TSX") || "client.tsx";
+  const filepath = pathjoin(import.meta.dirname ?? "", filename);
+  const title = Deno.env.get("TITLE") || "Counter";
+
   const code = await tsxToJs(filepath);
-  const html = HTML({ code, id: "app", title: "Counter" });
+  const html = HTML({ title }, CODE({ id: "root", code }));
   return ctx.html(html);
 });
 export default app;
