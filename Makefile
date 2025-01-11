@@ -27,4 +27,5 @@ clean:
 10:
 	mkdir -p examples/react-example
 	(cd examples/react-example && deno run -A ../../main.ts init && echo {} > deno.json && deno cache *.tsx)
+	deno run -A main.ts bundle examples/react-example/client.tsx --output-style html --next > examples/react-example/index.html
 .PHONY: 10
