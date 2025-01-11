@@ -1,6 +1,7 @@
 import { join, join as pathjoin } from "jsr:@std/path@1/join";
 
 import { type Context, Hono } from "jsr:@hono/hono@4.6.16";
+import { showRoutes } from "jsr:@hono/hono@4.6.16/dev";
 import { moreStrict, parseArgs } from "jsr:@podhmo/with-help@0.5.3";
 
 import { CODE, HTML, LINKS, tsxToJs } from "../../src/mini-webapp.ts";
@@ -56,6 +57,11 @@ function main() {
     ...options_,
     port: restrict.integer(options_.port),
   };
+
+  console.log("%croutes:", "font-weight: bold;");
+  console.log("");
+  showRoutes(app, { verbose: false });
+  console.log("");
 
   serve(app, {
     port: options.port,
