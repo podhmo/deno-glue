@@ -4,12 +4,12 @@ import { type Context, Hono } from "jsr:@hono/hono@4.6.16";
 import { showRoutes } from "jsr:@hono/hono@4.6.16/dev";
 import { moreStrict, parseArgs } from "jsr:@podhmo/with-help@0.5.3";
 
-import { CODE, HTML, LINKS, tsxToJs } from "jsr:@podhmo/glue@0.2.3/mini-webapp";
-import { serve } from "jsr:@podhmo/glue@0.2.3/serve";
+import { CODE, HTML, LINKS, tsxToJs } from "jsr:@podhmo/glue@0.2.4/mini-webapp";
+import { serve } from "jsr:@podhmo/glue@0.2.4/serve";
 import {
   BASE_URL as ESM_SH_BASE_URL,
   NEXT_BASE_URL as ESM_SH_NEXT_BASE_URL,
-} from "jsr:@podhmo/glue@0.2.3/esm-sh";
+} from "jsr:@podhmo/glue@0.2.4/esm-sh";
 
 const app = new Hono();
 
