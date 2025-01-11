@@ -6,12 +6,15 @@
     "jsr:@std/cli@1": "1.0.9",
     "jsr:@std/collections@^1.0.9": "1.0.9",
     "jsr:@std/fs@1.0.4": "1.0.4",
+    "jsr:@std/json@1": "1.0.1",
     "jsr:@std/jsonc@^1.0.1": "1.0.1",
     "jsr:@std/path@1": "1.0.8",
     "jsr:@std/path@1.0.6": "1.0.6",
     "jsr:@std/path@^1.0.6": "1.0.8",
     "npm:@types/react@19": "19.0.3",
     "npm:esbuild@~0.24.2": "0.24.2",
+    "npm:jsx-runtime@*": "1.2.0",
+    "npm:preact@10": "10.25.4",
     "npm:react-dom@19": "19.0.0_react@19.0.0",
     "npm:react@19": "19.0.0"
   },
@@ -37,8 +40,14 @@
         "jsr:@std/path@^1.0.6"
       ]
     },
+    "@std/json@1.0.1": {
+      "integrity": "1f0f70737e8827f9acca086282e903677bc1bb0c8ffcd1f21bca60039563049f"
+    },
     "@std/jsonc@1.0.1": {
-      "integrity": "6b36956e2a7cbb08ca5ad7fbec72e661e6217c202f348496ea88747636710dda"
+      "integrity": "6b36956e2a7cbb08ca5ad7fbec72e661e6217c202f348496ea88747636710dda",
+      "dependencies": [
+        "jsr:@std/json"
+      ]
     },
     "@std/path@1.0.6": {
       "integrity": "ab2c55f902b380cf28e0eec501b4906e4c1960d13f00e11cfbcd21de15f18fed"
@@ -161,6 +170,18 @@
         "@esbuild/win32-ia32",
         "@esbuild/win32-x64"
       ]
+    },
+    "jsx-runtime@1.2.0": {
+      "integrity": "sha512-iCxmRTlUAWmXwHZxN0JSx/T7eRi0SkKAskE0lp+j4W1mzdNp49ja/9QI2ZmlggPM95RqnDw5ioYjw0EcvpIClw==",
+      "dependencies": [
+        "object-assign"
+      ]
+    },
+    "object-assign@3.0.0": {
+      "integrity": "sha512-jHP15vXVGeVh1HuaA2wY6lxk+whK/x4KBG88VXeRma7CCun7iGD5qPc4eYykQ9sdQvg8jkwFKsSxHln2ybW3xQ=="
+    },
+    "preact@10.25.4": {
+      "integrity": "sha512-jLdZDb+Q+odkHJ+MpW/9U5cODzqnB+fy2EiHSZES7ldV5LK7yjlVzTp7R8Xy6W6y75kfK8iWYtFVH7lvjwrCMA=="
     },
     "react-dom@19.0.0_react@19.0.0": {
       "integrity": "sha512-4GV5sHFG0e/0AD4X+ySy6UJd3jVl1iNsNHdpad0qhABJ11twS3TTBnseqsKurKcsNqCEFeGL3uLpVChpIO3QfQ==",

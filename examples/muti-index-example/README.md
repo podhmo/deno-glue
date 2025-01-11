@@ -3,7 +3,8 @@
 複数のクライアントのコードを確認するための例
 
 - react.tsx -- react@19を使った例
-- (TODO: preact)
+- preact.tsx -- preact@10を使った例
+- (TODO: preact signals)
 
 ## 使い方
 
