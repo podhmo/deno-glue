@@ -17,14 +17,26 @@ import { TanStackRouterDevtools } from "npm:@tanstack/router-devtools";
 const rootRoute = createRootRoute({
   component: () => (
     <>
-      <div className="p-2 flex gap-2">
-        <Link to="/" className="[&.active]:font-bold">
-          Home
-        </Link>{" "}
-        <Link to="/about" className="[&.active]:font-bold">
-          About
-        </Link>
-      </div>
+      <header className="container">
+        <hgroup>
+          <h1>TanStack Router</h1>
+          <h2>Example</h2>
+        </hgroup>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/" className="[&.active]:font-bold">
+                Home
+              </Link>
+            </li>
+            <li>
+            <Link to="/about" className="[&.active]:font-bold">
+              About
+            </Link>
+            </li>
+          </ul>
+        </nav>
+      </header>
       <hr />
       <Outlet />
       <TanStackRouterDevtools />
@@ -52,7 +64,7 @@ const aboutRoute = createRoute({
     return (
       <>
         <h1>About</h1>
-        <p>about page</p>
+        <p>about page <a href="https://github.com/podhmo/deno-glue/tree/main/examples/router-example" target="_blank">code</a></p>
       </>
     );
   },

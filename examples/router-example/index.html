@@ -29,10 +29,15 @@ import { TanStackRouterDevtools } from "https://next.esm.sh/@tanstack/router-dev
 import { Fragment, jsx, jsxs } from "https://next.esm.sh/react@19.0.0/jsx-runtime";
 var rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsxs("div", { className: "p-2 flex gap-2", children: [
-      /* @__PURE__ */ jsx(Link, { to: "/", className: "[&.active]:font-bold", children: "Home" }),
-      " ",
-      /* @__PURE__ */ jsx(Link, { to: "/about", className: "[&.active]:font-bold", children: "About" })
+    /* @__PURE__ */ jsxs("header", { className: "container", children: [
+      /* @__PURE__ */ jsxs("hgroup", { children: [
+        /* @__PURE__ */ jsx("h1", { children: "TanStack Router" }),
+        /* @__PURE__ */ jsx("h2", { children: "Example" })
+      ] }),
+      /* @__PURE__ */ jsx("nav", { children: /* @__PURE__ */ jsxs("ul", { children: [
+        /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsx(Link, { to: "/", className: "[&.active]:font-bold", children: "Home" }) }),
+        /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsx(Link, { to: "/about", className: "[&.active]:font-bold", children: "About" }) })
+      ] }) })
     ] }),
     /* @__PURE__ */ jsx("hr", {}),
     /* @__PURE__ */ jsx(Outlet, {}),
@@ -55,7 +60,10 @@ var aboutRoute = createRoute({
   component: function About() {
     return /* @__PURE__ */ jsxs(Fragment, { children: [
       /* @__PURE__ */ jsx("h1", { children: "About" }),
-      /* @__PURE__ */ jsx("p", { children: "about page" })
+      /* @__PURE__ */ jsxs("p", { children: [
+        "about page ",
+        /* @__PURE__ */ jsx("a", { href: "https://github.com/podhmo/deno-glue/tree/main/examples/router-example", target: "_blank", children: "code" })
+      ] })
     ] });
   }
 });
