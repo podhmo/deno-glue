@@ -71,6 +71,7 @@ function main() {
     debug: options.debug,
     development: options.development,
     baseUrl: options.next ? ESM_SH_NEXT_BASE_URL : ESM_SH_BASE_URL,
+    denoConfigPath: options["deno-config"],
   }).finished.then(() => {
     console.log(`stop http://${options.host}:${options.port}/`);
   });
