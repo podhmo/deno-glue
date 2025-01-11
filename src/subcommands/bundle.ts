@@ -8,7 +8,7 @@ import {
   PathReplacePlugin,
   transpile,
 } from "../esm-sh.ts";
-import { HTML } from "../mini-webapp.ts";
+import { CODE, HTML } from "../mini-webapp.ts";
 import { findClosestFile } from "../_fileutils.ts";
 
 const outputStyles = ["esm", "html"] as const;
@@ -117,11 +117,10 @@ export async function main(
           plugins: plugins,
           developmentMode: options.development,
         });
-        const html = HTML({
-          id: options["html-id"],
-          code,
-          title: basename(inputFile),
-        });
+        const html = HTML(
+          { title: basename(inputFile) },
+          CODE({ id: options["html-id"], code }),
+        );
 
         if (options.outdir === undefined) {
           console.log(html);

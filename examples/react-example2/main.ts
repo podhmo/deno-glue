@@ -1,7 +1,7 @@
 import { type Context, Hono } from "jsr:@hono/hono@4.6.14";
 
 import { transpile as tsxToJs } from "../../src/esm-sh.ts";
-import { HTML } from "../../src/mini-webapp.ts";
+import { CODE, HTML } from "../../src/mini-webapp.ts";
 import { parseArgs } from "jsr:@podhmo/with-help@0.5.3";
 
 const options = parseArgs(Deno.args, {
@@ -25,10 +25,8 @@ app.get("/", async (ctx: Context) => {
   });
 
   const html = HTML({
-    id: "root",
-    code: clientSideCode,
     title: "counter example",
-  });
+  }, CODE({ id: "root", code: clientSideCode }));
   return ctx.html(html);
 });
 
