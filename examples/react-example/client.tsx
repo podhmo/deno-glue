@@ -1,29 +1,33 @@
 /** @jsxRuntime automatic */
-/** @jsxImportSource npm:react@18 */
-/** @jsxImportSourceTypes npm:@types/react@18 */
+/** @jsxImportSource npm:react@19 */
+/** @jsxImportSourceTypes npm:@types/react@19 */
 
-import { StrictMode, useState } from "npm:react@18";
-import { createRoot } from "npm:react-dom@18/client";
+import { StrictMode, useState } from "npm:react@19";
+import { createRoot } from "npm:react-dom@19/client";
 
 // ----------------------------------------
 // components
 // ----------------------------------------
 function Counter() {
   const [count, setCount] = useState(0);
+  const onIncrement = () => setCount((prev: number) => prev + 1);
+  const onDecrement = () => setCount((prev: number) => prev - 1);
 
   return (
-    <div>
-      <p>{count}</p>
-      <button onClick={() => setCount(count + 1)}>Increment</button>
-    </div>
+    <>
+      <p>Count: {count}</p>
+      <button onClick={onIncrement}>Increment</button>
+      <button onClick={onDecrement}>Decrement</button>
+    </>
   );
 }
-export default function App() {
+
+function App() {
   return (
-    <main className="container">
-      <h1>couter example</h1>
+    <>
+      <h1>Counter</h1>
       <Counter />
-    </main>
+    </>
   );
 }
 

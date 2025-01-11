@@ -25,6 +25,6 @@ clean:
 
 # init example
 10:
-	mkdir -p examples/serve-example
-	(cd examples/serve-example && deno run -A ../../main.ts init)
+	mkdir -p examples/react-example
+	(cd examples/react-example && deno run -A ../../main.ts init && echo {} > deno.json && deno cache *.tsx)
 .PHONY: 10
