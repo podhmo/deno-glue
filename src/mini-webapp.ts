@@ -56,10 +56,36 @@ export function HTML(
 export function CODE(props: { id: string; code: string }): string[] {
   return [
     `<main id=${props.id} class="container">`,
+    `<section>`,
     "<h1>...</h1>",
+    `</section>`,
     "</main>",
     `<script type="module">`,
     props.code,
     `</script>`,
+  ];
+}
+
+export function LINKS(
+  props: {
+    id?: string;
+    title?: string;
+    links: ({ href: string; text: string } | string)[];
+  },
+): string[] {
+  const title = props.title ?? "Links";
+  const items = props.links.map((v) =>
+    typeof v === "string"
+      ? `  <a role="button" class="secondary" href="${v}">${v}</a>`
+      : `  <a role="button" class="secondary" href="${v.href}">${v.text}</a>`
+  );
+
+  return [
+    `<main id=${props.id} class="container">`,
+    `<section>`,
+    `<h1>${title}</h1>`,
+    ...(items.flatMap((v) => [`<p class="grid">`, v, `</p>`])),
+    `</section>`,
+    `</main>`,
   ];
 }
