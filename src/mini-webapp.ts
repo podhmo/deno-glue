@@ -6,7 +6,7 @@ import type { transpileOptions } from "./esm-sh.ts";
 export const DEFAULT_CSS: string =
   `https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css`;
 
-const options: transpileOptions & { useCache: boolean } = {
+export const options: transpileOptions & { useCache: boolean } = {
   baseUrl: ESM_SH_BASE_URL,
   useCache: false,
   debug: false,
@@ -16,29 +16,10 @@ const options: transpileOptions & { useCache: boolean } = {
 
 // helper functions for modify options
 
-export function useCache(proxyUrl: string) {
-  options.useCache = true;
-  options.baseUrl = proxyUrl; // request via local endpoint
-}
-export function useDevelopmentMode() {
-  options.developmentMode = true;
-}
-export function useDenoConfig(path: string) {
-  options.denoConfigPath = path;
-}
-export function useDebug() {
-  options.debug = true;
-}
-
 export function tsxToJs(
   filename: string,
 ): Promise<string> {
-  return transpile(filename, {
-    debug: options.debug,
-    baseUrl: options.baseUrl,
-    developmentMode: options.developmentMode,
-    denoConfigPath: options.denoConfigPath,
-  });
+  return transpile(filename, options);
 }
 
 export function HTML(

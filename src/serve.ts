@@ -30,18 +30,19 @@ export function serve(
   const baseUrl = options.baseUrl ?? ESM_SH_BASE_URL;
   // activate local cache
   if (options.cache) {
-    miniweb.useCache("/"); // request via local endpoint
+    miniweb.options.useCache = true;
+    miniweb.options.baseUrl = "/"; // request via local endpoint
     setupEsmShProxyEndpoint(app, { hostname, port, baseUrl });
   }
 
   if (options.development) {
-    miniweb.useDevelopmentMode();
+    miniweb.options.developmentMode = true;
   }
   if (options.denoConfigPath !== undefined) {
-    miniweb.useDenoConfig(options.denoConfigPath);
+    miniweb.options.denoConfigPath = options.denoConfigPath;
   }
   if (options.debug) {
-    miniweb.useDebug();
+    miniweb.options.debug = true;
   }
 
   return Deno.serve({
