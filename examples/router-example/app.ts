@@ -1,6 +1,6 @@
-import { join as pathjoin } from "jsr:@std/path@1.0.8/join";
+import { join as pathjoin } from "jsr:@std/path@1/join";
 
-import { type Context, Hono } from "jsr:@hono/hono@4.6.15";
+import { type Context, Hono } from "jsr:@hono/hono@4.6.16";
 import { CODE, HTML, tsxToJs } from "jsr:@podhmo/glue@0.2.3/mini-webapp";
 
 // serve for development
