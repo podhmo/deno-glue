@@ -1,5 +1,5 @@
 import { moreStrict, parseArgs } from "@podhmo/with-help";
-const candidates = ["serve"] as const;
+const candidates = ["react", "preact"] as const;
 
 export async function main(
   args: string[] = Deno.args,
@@ -11,7 +11,8 @@ export async function main(
     required: ["template"],
     boolean: ["debug"],
 
-    default: { template: "serve", debug: baseOptions.debug },
+    default: { debug: baseOptions.debug },
+    alias: { "t": "template" },
     flagDescription: {
       template: `init template, one of ${JSON.stringify(candidates)}`,
     },
@@ -27,9 +28,22 @@ export async function main(
     console.error(`init with ${options.template}`);
   }
   switch (options.template) {
-    case "serve": {
+    case "react": {
       await copyFile({
-        from: "./templates/serve/client.tsx",
+        from: "./templates/components/react/main-counter.tsx",
+        to: "./client.tsx",
+        debug: options.debug,
+      });
+      await copyFile({
+        from: "./templates/serve/app.ts",
+        to: "./app.ts",
+        debug: options.debug,
+      });
+      break;
+    }
+    case "preact": {
+      await copyFile({
+        from: "./templates/components/preact/main-counter.tsx",
         to: "./client.tsx",
         debug: options.debug,
       });
