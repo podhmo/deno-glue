@@ -1,5 +1,10 @@
 import { moreStrict, parseArgs } from "@podhmo/with-help";
-const candidates = ["react", "preact"] as const;
+
+const candidates = [
+  "react", // react counter example
+  "preact", // preact counter example
+  "serve", // server example
+] as const;
 
 export async function main(
   args: string[] = Deno.args,
@@ -30,26 +35,44 @@ export async function main(
   switch (options.template) {
     case "react": {
       await copyFile({
-        from: "./templates/components/react/main-counter.tsx",
-        to: "./client.tsx",
+        from: "./templates/serve/app.ts",
+        to: "./app.ts",
         debug: options.debug,
       });
       await copyFile({
-        from: "./templates/serve/app.ts",
-        to: "./app.ts",
+        from: "./templates/components/react/main-counter.tsx",
+        to: "./client.tsx",
         debug: options.debug,
       });
       break;
     }
     case "preact": {
       await copyFile({
+        from: "./templates/serve/app.ts",
+        to: "./app.ts",
+        debug: options.debug,
+      });
+      await copyFile({
         from: "./templates/components/preact/main-counter.tsx",
         to: "./client.tsx",
         debug: options.debug,
       });
+      break;
+    }
+    case "serve": {
       await copyFile({
-        from: "./templates/serve/app.ts",
-        to: "./app.ts",
+        from: "./templates/serve/main.ts",
+        to: "./main.ts",
+        debug: options.debug,
+      });
+      await copyFile({
+        from: "./templates/components/react/main-counter.tsx",
+        to: "./react.tsx",
+        debug: options.debug,
+      });
+      await copyFile({
+        from: "./templates/components/preact/main-counter.tsx",
+        to: "./preact.tsx",
         debug: options.debug,
       });
       break;

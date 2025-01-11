@@ -25,9 +25,7 @@ function Counter() {
 function App() {
   return (
     <>
-      <h1>
-        <a href="/">top</a> {">"} Counter
-      </h1>
+      <h1>Counter</h1>
       <Counter />
     </>
   );

@@ -2,17 +2,18 @@
   "version": "4",
   "specifiers": {
     "jsr:@hono/hono@4.6.16": "4.6.16",
+    "jsr:@podhmo/glue@*": "0.2.3",
+    "jsr:@podhmo/glue@0.2.3": "0.2.3",
     "jsr:@podhmo/with-help@0.5.3": "0.5.3",
     "jsr:@std/cli@1": "1.0.9",
     "jsr:@std/collections@^1.0.9": "1.0.9",
     "jsr:@std/fs@1.0.4": "1.0.4",
-    "jsr:@std/json@1": "1.0.1",
     "jsr:@std/jsonc@^1.0.1": "1.0.1",
     "jsr:@std/path@1": "1.0.8",
     "jsr:@std/path@1.0.6": "1.0.6",
     "jsr:@std/path@^1.0.6": "1.0.8",
     "npm:@types/react@19": "19.0.3",
-    "npm:esbuild@~0.24.2": "0.24.2",
+    "npm:esbuild@0.24.2": "0.24.2",
     "npm:jsx-runtime@*": "1.2.0",
     "npm:preact@10": "10.25.4",
     "npm:react-dom@19": "19.0.0_react@19.0.0",
@@ -21,6 +22,16 @@
   "jsr": {
     "@hono/hono@4.6.16": {
       "integrity": "b540c6b1352d73142895f7bb6bfd0b6cc514ede61c12940338c4ae5dd06cb326"
+    },
+    "@podhmo/glue@0.2.3": {
+      "integrity": "a081a15840e0b0925dd3dfc8d1eb525a71487629f08ce0cbfae8da752336965e",
+      "dependencies": [
+        "jsr:@std/collections",
+        "jsr:@std/fs",
+        "jsr:@std/jsonc",
+        "jsr:@std/path@1.0.6",
+        "npm:esbuild"
+      ]
     },
     "@podhmo/with-help@0.5.3": {
       "integrity": "19bec7430a2bd874cf2141e7c626f8f46ff1bcf7cbe09a0d3c1eef07522592d0",
@@ -40,14 +51,8 @@
         "jsr:@std/path@^1.0.6"
       ]
     },
-    "@std/json@1.0.1": {
-      "integrity": "1f0f70737e8827f9acca086282e903677bc1bb0c8ffcd1f21bca60039563049f"
-    },
     "@std/jsonc@1.0.1": {
-      "integrity": "6b36956e2a7cbb08ca5ad7fbec72e661e6217c202f348496ea88747636710dda",
-      "dependencies": [
-        "jsr:@std/json"
-      ]
+      "integrity": "6b36956e2a7cbb08ca5ad7fbec72e661e6217c202f348496ea88747636710dda"
     },
     "@std/path@1.0.6": {
       "integrity": "ab2c55f902b380cf28e0eec501b4906e4c1960d13f00e11cfbcd21de15f18fed"
@@ -196,12 +201,5 @@
     "scheduler@0.25.0": {
       "integrity": "sha512-xFVuu11jh+xcO7JOAGJNOXld8/TcEHK/4CituBUeUb5hqxJLj9YuemAEuvm9gQ/+pgXYfbQuqAkiYu+u7YEsNA=="
     }
-  },
-  "workspace": {
-    "dependencies": [
-      "jsr:@std/collections@^1.0.9",
-      "jsr:@std/jsonc@^1.0.1",
-      "npm:esbuild@~0.24.2"
-    ]
   }
 }
