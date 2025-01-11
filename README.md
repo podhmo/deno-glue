@@ -23,9 +23,12 @@ serve
 $ deno run -A jsr:@podhmo/glue serve --port 8080 app.ts
 ```
 
-init
+init (scaffold)
 
 ```console
 # generate client.tsx and app.ts
-$ deno run -A jsr:@podhmo/glue init
+$ deno run -A jsr:@podhmo/glue init -t react
+# or $ deno run -A jsr:@podhmo/glue init -t preact
+
+$ deno run -A jsr:@podhmo/glue serve --port 8080 --next app.ts
 ```
