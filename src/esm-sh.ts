@@ -122,6 +122,7 @@ export async function transpile(
     bundle: true, // need for resolve import
     logLevel: options.debug ? "debug" : "info",
     format: "esm",
+    tsconfig: options.denoConfigPath,
   });
   if (b.outputFiles === undefined) {
     if (b.errors.length > 0) {
