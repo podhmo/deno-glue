@@ -1,0 +1,95 @@
+{
+  "version": "4",
+  "specifiers": {
+    "npm:@tanstack/react-router@*": "1.95.3_react@19.0.0_react-dom@19.0.0__react@19.0.0",
+    "npm:@tanstack/router-devtools@*": "1.95.3_@tanstack+react-router@1.95.3__react@19.0.0__react-dom@19.0.0___react@19.0.0_react@19.0.0_react-dom@19.0.0__react@19.0.0",
+    "npm:@types/react@19": "19.0.3",
+    "npm:react-dom@19": "19.0.0_react@19.0.0",
+    "npm:react@19": "19.0.0"
+  },
+  "npm": {
+    "@tanstack/history@1.95.2": {
+      "integrity": "sha512-FgUauZLg+nRybH5dKyAYokmXs064rHc0qpMizKxTegSTMHj/z2B6T7pjEG2Zd6dBegeYNVL97ROg7Srr9cuBug=="
+    },
+    "@tanstack/react-router@1.95.3_react@19.0.0_react-dom@19.0.0__react@19.0.0": {
+      "integrity": "sha512-FClsUejB/uvzlM7irxpbiwwXHWPSNfoGV3JrMc+K4GQSnBAuR0/LCkvuThfdOW/k9W7kLZHN1DEKHV7D9D2Dsw==",
+      "dependencies": [
+        "@tanstack/history",
+        "@tanstack/react-store",
+        "jsesc",
+        "react",
+        "react-dom",
+        "tiny-invariant",
+        "tiny-warning"
+      ]
+    },
+    "@tanstack/react-store@0.7.0_react@19.0.0_react-dom@19.0.0__react@19.0.0": {
+      "integrity": "sha512-S/Rq17HaGOk+tQHV/yrePMnG1xbsKZIl/VsNWnNXt4XW+tTY8dTlvpJH2ZQ3GRALsusG5K6Q3unAGJ2pd9W/Ng==",
+      "dependencies": [
+        "@tanstack/store",
+        "react",
+        "react-dom",
+        "use-sync-external-store"
+      ]
+    },
+    "@tanstack/router-devtools@1.95.3_@tanstack+react-router@1.95.3__react@19.0.0__react-dom@19.0.0___react@19.0.0_react@19.0.0_react-dom@19.0.0__react@19.0.0": {
+      "integrity": "sha512-IPLdCx6wwprKGyYFSCpbNkn9u7I6BOCAClsFHmZZb1MzGpMN5QHlyPujQmVg+kKFN34Bxmxnnyq0XRs9x7f6QQ==",
+      "dependencies": [
+        "@tanstack/react-router",
+        "clsx",
+        "goober",
+        "react",
+        "react-dom"
+      ]
+    },
+    "@tanstack/store@0.7.0": {
+      "integrity": "sha512-CNIhdoUsmD2NolYuaIs8VfWM467RK6oIBAW4nPEKZhg1smZ+/CwtCdpURgp7nxSqOaV9oKkzdWD80+bC66F/Jg=="
+    },
+    "@types/react@19.0.3": {
+      "integrity": "sha512-UavfHguIjnnuq9O67uXfgy/h3SRJbidAYvNjLceB+2RIKVRBzVsh0QO+Pw6BCSQqFS9xwzKfwstXx0m6AbAREA==",
+      "dependencies": [
+        "csstype"
+      ]
+    },
+    "clsx@2.1.1": {
+      "integrity": "sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA=="
+    },
+    "csstype@3.1.3": {
+      "integrity": "sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw=="
+    },
+    "goober@2.1.16_csstype@3.1.3": {
+      "integrity": "sha512-erjk19y1U33+XAMe1VTvIONHYoSqE4iS7BYUZfHaqeohLmnC0FdxEh7rQU+6MZ4OajItzjZFSRtVANrQwNq6/g==",
+      "dependencies": [
+        "csstype"
+      ]
+    },
+    "jsesc@3.1.0": {
+      "integrity": "sha512-/sM3dO2FOzXjKQhJuo0Q173wf2KOo8t4I8vHy6lF9poUp7bKT0/NHE8fPX23PwfhnykfqnC2xRxOnVw5XuGIaA=="
+    },
+    "react-dom@19.0.0_react@19.0.0": {
+      "integrity": "sha512-4GV5sHFG0e/0AD4X+ySy6UJd3jVl1iNsNHdpad0qhABJ11twS3TTBnseqsKurKcsNqCEFeGL3uLpVChpIO3QfQ==",
+      "dependencies": [
+        "react",
+        "scheduler"
+      ]
+    },
+    "react@19.0.0": {
+      "integrity": "sha512-V8AVnmPIICiWpGfm6GLzCR/W5FXLchHop40W4nXBmdlEceh16rCN8O8LNWm5bh5XUX91fh7KpA+W0TgMKmgTpQ=="
+    },
+    "scheduler@0.25.0": {
+      "integrity": "sha512-xFVuu11jh+xcO7JOAGJNOXld8/TcEHK/4CituBUeUb5hqxJLj9YuemAEuvm9gQ/+pgXYfbQuqAkiYu+u7YEsNA=="
+    },
+    "tiny-invariant@1.3.3": {
+      "integrity": "sha512-+FbBPE1o9QAYvviau/qC5SE3caw21q3xkvWKBtja5vgqOWIHHJ3ioaq1VPfn/Szqctz2bU/oYeKd9/z5BL+PVg=="
+    },
+    "tiny-warning@1.0.3": {
+      "integrity": "sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA=="
+    },
+    "use-sync-external-store@1.4.0_react@19.0.0": {
+      "integrity": "sha512-9WXSPC5fMv61vaupRkCKCxsPxBocVnwakBEkMIHHpkTTg6icbJtg6jzgtLDm4bl3cSHAca52rYWih0k4K3PfHw==",
+      "dependencies": [
+        "react"
+      ]
+    }
+  }
+}

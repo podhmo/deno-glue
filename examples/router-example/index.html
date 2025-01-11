@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<title>client.tsx</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="light dark" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+</head>
+<body>
+<main id=root class="container">
+<section>
+<h1>...</h1>
+</section>
+</main>
+<script type="module">
+// client.tsx
+import { StrictMode } from "https://next.esm.sh/react@19.0.0";
+import { createRoot } from "https://next.esm.sh/react-dom@19.0.0/client?deps=react@19.0.0,scheduler@0.25.0";
+import {
+  createRootRoute,
+  createRoute,
+  createRouter,
+  Link,
+  Outlet,
+  RouterProvider
+} from "https://next.esm.sh/@tanstack/react-router@1.95.3?deps=@tanstack/history@1.95.2,@tanstack/react-store@0.7.0,@tanstack/store@0.7.0,jsesc@3.1.0,react-dom@19.0.0,react@19.0.0,scheduler@0.25.0,tiny-invariant@1.3.3,tiny-warning@1.0.3,use-sync-external-store@1.4.0";
+import { TanStackRouterDevtools } from "https://next.esm.sh/@tanstack/router-devtools@1.95.3?deps=@tanstack/history@1.95.2,@tanstack/react-router@1.95.3,@tanstack/react-store@0.7.0,@tanstack/store@0.7.0,clsx@2.1.1,csstype@3.1.3,goober@2.1.16,jsesc@3.1.0,react-dom@19.0.0,react@19.0.0,scheduler@0.25.0,tiny-invariant@1.3.3,tiny-warning@1.0.3,use-sync-external-store@1.4.0";
+import { Fragment, jsx, jsxs } from "https://next.esm.sh/react@19.0.0/jsx-runtime";
+var rootRoute = createRootRoute({
+  component: () => /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsxs("div", { className: "p-2 flex gap-2", children: [
+      /* @__PURE__ */ jsx(Link, { to: "/", className: "[&.active]:font-bold", children: "Home" }),
+      " ",
+      /* @__PURE__ */ jsx(Link, { to: "/about", className: "[&.active]:font-bold", children: "About" })
+    ] }),
+    /* @__PURE__ */ jsx("hr", {}),
+    /* @__PURE__ */ jsx(Outlet, {}),
+    /* @__PURE__ */ jsx(TanStackRouterDevtools, {})
+  ] })
+});
+var indexRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/",
+  component: function Index() {
+    return /* @__PURE__ */ jsxs(Fragment, { children: [
+      /* @__PURE__ */ jsx("h1", { children: "Index" }),
+      /* @__PURE__ */ jsx("p", { children: "Welcome Home!" })
+    ] });
+  }
+});
+var aboutRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/about",
+  component: function About() {
+    return /* @__PURE__ */ jsxs(Fragment, { children: [
+      /* @__PURE__ */ jsx("h1", { children: "About" }),
+      /* @__PURE__ */ jsx("p", { children: "about page" })
+    ] });
+  }
+});
+var routeTree = rootRoute.addChildren([indexRoute, aboutRoute]);
+var router = createRouter({ routeTree });
+var root = createRoot(document.getElementById("root"));
+root.render(
+  /* @__PURE__ */ jsx(StrictMode, { children: /* @__PURE__ */ jsx(RouterProvider, { router }) })
+);
+
+</script>
+</body>
+</html>
