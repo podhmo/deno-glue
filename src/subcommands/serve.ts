@@ -1,4 +1,6 @@
 import { dirname } from "@std/path/dirname";
+import { resolve } from "@std/path/resolve";
+import { toFileUrl } from "@std/path/to-file-url";
 
 import { moreStrict, parseArgs, printHelp } from "@podhmo/with-help";
 
@@ -69,7 +71,7 @@ export async function main(
     }
 
     // to uri
-    specifier = `file://${Deno.realPathSync(specifier)}`; // to absolute path for restricted dynamic import in deno.
+    specifier = toFileUrl(resolve(specifier)).href; // to absolute path for restricted dynamic import in deno.
   }
 
   // TODO: support tsx
