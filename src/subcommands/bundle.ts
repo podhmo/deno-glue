@@ -100,6 +100,7 @@ export async function main(
           logLevel: options.debug ? "debug" : "info",
           format: "esm",
           outdir: options.outdir,
+          tsconfig: denoConfigPath,
           outExtension: {
             ".js": ".mjs",
           },
