@@ -5,6 +5,7 @@
 ## examples
 
 - [examples/react-example](https://github.com/podhmo/deno-glue/tree/main/examples/react-example)
+- [examples/router-example](https://github.com/podhmo/deno-glue/tree/main/examples/router-example)
 
 ## CLI
 
