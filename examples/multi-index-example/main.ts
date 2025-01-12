@@ -14,7 +14,7 @@ import {
 const app = new Hono();
 
 const tsxFiles: string[] = [];
-for (const e of Deno.readDirSync(".")) {
+for (const e of Deno.readDirSync(pathjoin(import.meta.dirname ?? ""))) {
   if (e.isFile && e.name.endsWith(".tsx")) {
     tsxFiles.push(e.name);
   }
