@@ -31,5 +31,5 @@ clean:
 .PHONY: 10
 11:
 	mkdir -p examples/multi-index-example
-	(cd examples/multi-index-example && deno run -A ../../main.ts init -t serve && echo '{"tasks": {"dev": "deno cache *.tsx && deno run -A main.ts --port 8080 --next"}}' > deno.json && deno cache *.tsx)
+	(cd examples/multi-index-example && deno run -A ../../main.ts init -t serve && deno cache *.tsx)
 .PHONY: 10

@@ -14,6 +14,7 @@
     "jsr:@std/path@^1.0.6": "1.0.8",
     "npm:@types/react@19": "19.0.3",
     "npm:esbuild@0.24.2": "0.24.2",
+    "npm:esbuild@~0.24.2": "0.24.2",
     "npm:jsx-runtime@*": "1.2.0",
     "npm:preact@10": "10.25.4",
     "npm:react-dom@19": "19.0.0_react@19.0.0",
@@ -30,7 +31,7 @@
         "jsr:@std/fs",
         "jsr:@std/jsonc",
         "jsr:@std/path@1.0.6",
-        "npm:esbuild"
+        "npm:esbuild@0.24.2"
       ]
     },
     "@podhmo/with-help@0.5.3": {
@@ -201,5 +202,12 @@
     "scheduler@0.25.0": {
       "integrity": "sha512-xFVuu11jh+xcO7JOAGJNOXld8/TcEHK/4CituBUeUb5hqxJLj9YuemAEuvm9gQ/+pgXYfbQuqAkiYu+u7YEsNA=="
     }
+  },
+  "workspace": {
+    "dependencies": [
+      "jsr:@std/collections@^1.0.9",
+      "jsr:@std/jsonc@^1.0.1",
+      "npm:esbuild@~0.24.2"
+    ]
   }
 }
