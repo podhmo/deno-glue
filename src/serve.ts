@@ -3,6 +3,7 @@ import type { Context, Hono } from "@hono/hono";
 
 import { BASE_URL as ESM_SH_BASE_URL } from "./esm-sh.ts";
 import * as miniweb from "./mini-webapp.ts";
+import { CacheError } from "../vendor/denosaurs/cache/cache.ts";
 
 // interface Module {
 //   fetch: Deno.ServeHandler;
@@ -88,28 +89,36 @@ export function setupEsmShProxyEndpoint(app: Module, options: {
     }
 
     // TODO: confirm cache and download
-    const data = await cache.cache(url, undefined, ns); // todo: passing policy
-    const status = data.meta.status ?? 200;
-    console.error("%cproxy request[%d]: %s", "color:gray", status, url);
+    try {
+      const data = await cache.cache(url, undefined, ns); // todo: passing policy
+      const status = data.meta.status ?? 200;
+      console.error("%cproxy request[%d]: %s", "color:gray", status, url);
 
-    if (status === 301 || status === 302 || status === 303) {
-      const headers = data.meta.headers ?? {};
-      let location = headers["Location"] || headers["location"];
-      if (location) {
-        location = location.replace(baseUrl, "");
-        console.error("%credirect: %s", "color:gray", location);
-        return ctx.redirect(location, status);
+      if (status === 301 || status === 302 || status === 303) {
+        const headers = data.meta.headers ?? {};
+        let location = headers["Location"] || headers["location"];
+        if (location) {
+          location = location.replace(baseUrl, "");
+          console.error("%credirect: %s", "color:gray", location);
+          return ctx.redirect(location, status);
+        }
       }
-    }
 
-    const fileData = await Deno.readFile(data.path);
-    return new Response(fileData, {
-      headers: {
-        ...data.meta.headers,
-        "Access-Control-Allow-Origin":
-          `http://${options.hostname}:${options.port}`,
-      },
-      status: data.meta.status ?? 200,
-    });
+      const fileData = await Deno.readFile(data.path);
+      return new Response(fileData, {
+        headers: {
+          ...data.meta.headers,
+          "Access-Control-Allow-Origin":
+            `http://${options.hostname}:${options.port}`,
+        },
+        status: data.meta.status ?? 200,
+      });
+    } catch (e) {
+      console.error("%cerror: %s in request %s", "color:red", e, url);
+      if (e instanceof CacheError) {
+        return new Response("error", { status: 404 });
+      }
+      return new Response("error", { status: 500 });
+    }
   });
 }
